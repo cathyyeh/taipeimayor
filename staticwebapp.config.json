@@ -1,0 +1,9 @@
+{
+  "navigationFallback": {
+    "rewrite": "index.html",
+    "exclude": ["*.html", "*.md", "/images/*.{png,jpg,gif}"]
+  },
+  "mimeTypes": {
+    ".md": "text/markdown"
+  }
+}

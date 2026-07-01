@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>開放資料中心 — Taipei Governance Lab</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap');
+  :root{
+    --paper:#F1ECDF; --ink:#231F1A; --ink-soft:#5A5348;
+    --bronze:#A8763B; --bronze-deep:#7C5527; --rust:#B24A32;
+    --line:#C9BFA4; --card:#FAF7EE;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Noto Sans TC',sans-serif;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px;}
+  a{color:var(--bronze-deep);}
+
+  .topnav{padding:16px 0;border-bottom:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:12px;}
+  .topnav a{text-decoration:none;color:var(--ink-soft);}
+  .topnav a:hover{color:var(--bronze-deep);}
+
+  .hero{padding:56px 0 40px;border-bottom:1px solid var(--line);
+    background:repeating-linear-gradient(0deg, transparent 0 39px, rgba(35,31,26,0.035) 39px 40px), var(--paper);}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:var(--bronze-deep);text-transform:uppercase;margin-bottom:16px;}
+  h1{font-family:'Noto Serif TC',serif;font-weight:900;font-size:clamp(28px,4.6vw,42px);line-height:1.3;margin:0 0 18px;max-width:640px;}
+  .lede{font-size:16px;line-height:1.9;color:var(--ink-soft);max-width:620px;margin:0;}
+
+  .section{padding:52px 0;border-bottom:1px solid var(--line);}
+  .section.no-border{border-bottom:none;}
+  .section-head{display:flex;align-items:baseline;gap:14px;margin-bottom:10px;}
+  .section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--bronze-deep);border-bottom:2px solid var(--bronze);padding-bottom:2px;}
+  .section h2{font-family:'Noto Serif TC',serif;font-weight:700;font-size:23px;margin:0;}
+  .section-note{font-size:14px;color:var(--ink-soft);max-width:680px;line-height:1.8;margin:14px 0 28px;}
+
+  /* source table */
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-bottom:8px;}
+  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;line-height:1.7;}
+  th{background:var(--card);font-family:'Noto Serif TC',serif;font-weight:700;}
+  td.tag{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--bronze-deep);white-space:nowrap;}
+
+  /* file list */
+  .file-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  @media (max-width:680px){.file-grid{grid-template-columns:1fr;}}
+  .file-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;display:flex;flex-direction:column;gap:6px;}
+  .file-name{font-family:'Noto Serif TC',serif;font-weight:700;font-size:15px;}
+  .file-desc{font-size:13px;color:var(--ink-soft);line-height:1.7;}
+  .file-link{font-family:'JetBrains Mono',monospace;font-size:12px;margin-top:4px;}
+
+  /* status checklist */
+  .status-list{list-style:none;margin:0;padding:0;}
+  .status-list li{
+    display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line);font-size:14px;line-height:1.7;
+  }
+  .status-list li:last-child{border-bottom:none;}
+  .check{font-family:'JetBrains Mono',monospace;font-size:13px;flex-shrink:0;width:20px;}
+  .check.done{color:var(--bronze-deep);}
+  .check.pending{color:var(--ink-soft);}
+
+  .principle-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  @media (max-width:680px){.principle-grid{grid-template-columns:1fr;}}
+  .principle-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;}
+  .principle-card .num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--bronze-deep);margin-bottom:8px;}
+  .principle-card p{font-size:13.5px;color:var(--ink-soft);line-height:1.75;margin:0;}
+
+  footer{padding:36px 0 60px;font-size:12px;color:var(--ink-soft);line-height:1.9;}
+</style>
+</head>
+<body>
+
+<div class="topnav"><div class="wrap"><a href="index.html">← 回首頁</a> ／ 06 開放資料中心</div></div>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Open Data · 已上線</div>
+    <h1>所有分析怎麼做出來的，都在這裡。</h1>
+    <p class="lede">這個網站的核心主張是「用資料，不用印象；用證據，不用立場」。這個主張只有在方法與資料來源完全公開、可被檢視、可被挑戰的前提下才成立——這頁就是那個檢視入口。</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="section">
+    <div class="section-head"><span class="section-num">01</span><h2>四份公開文件</h2></div>
+    <p class="section-note">目前所有分析都收斂在這四份文件裡。研究文件是最原始的資料整理，其他三份是依研究文件延伸出的方法論與呈現頁。</p>
+    <div class="file-grid">
+      <div class="file-card">
+        <div class="file-name">台北市長30年政策回顧研究</div>
+        <div class="file-desc">六任市長（黃大洲—蔣萬安）的政策整理，含財政負債時間序列、人口淨遷徙趨勢，以及跨任期觀察。</div>
+        <div class="file-link"><a href="台北市長30年政策回顧研究.md">開啟文件 →</a></div>
+      </div>
+      <div class="file-card">
+        <div class="file-name">治理能力模型：方法論</div>
+        <div class="file-desc">12項治理能力的定義依據、六任市長的能力證據對照，以及「台北當代最需要強化的能力」排序推論過程。</div>
+        <div class="file-link"><a href="治理能力模型_方法論.md">開啟文件 →</a></div>
+      </div>
+      <div class="file-card">
+        <div class="file-name">01 台北三十年 Timeline</div>
+        <div class="file-desc">互動頁面：任期時間軸、8維施政剖面雷達圖、財政負債走勢圖、每任市長的重大事件卡。</div>
+        <div class="file-link"><a href="taipei-mayors-prototype.html">開啟頁面 →</a></div>
+      </div>
+      <div class="file-card">
+        <div class="file-name">03 城市治理能力模型</div>
+        <div class="file-desc">互動頁面：12項能力定義、當代優先排序圖表、六任市長能力對照簡表。</div>
+        <div class="file-link"><a href="governance-framework.html">開啟頁面 →</a></div>
+      </div>
+      <div class="file-card">
+        <div class="file-name">02 政策資料庫（示範版）</div>
+        <div class="file-desc">互動頁面：捷運、社會住宅、都市更新三個政策領域的完整結構化資料。</div>
+        <div class="file-link"><a href="policy-explorer.html">開啟頁面 →</a></div>
+      </div>
+      <div class="file-card">
+        <div class="file-name">05 候選人政策比對（測驗版）</div>
+        <div class="file-desc">互動頁面：六題政策傾向測驗，對照2026台北市長選舉候選人公開立場。</div>
+        <div class="file-link"><a href="candidate-match.html">開啟頁面 →</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><span class="section-num">02</span><h2>資料來源</h2></div>
+    <p class="section-note">按資料類型分類。我們優先採用政府/官方公告與審計報告，其次是主流媒體報導與事實查核機構的查核結果，敘述性資料（如個人回憶、社群討論）僅用於佐證情境，不作為量化依據。</p>
+    <table>
+      <tr><th style="width:130px;">資料類型</th><th>來源</th></tr>
+      <tr><td class="tag">官方統計</td><td>台北市政府全球資訊網、台北市政府財政局新聞稿、台北市都市更新處、審計部中央及地方政府決算審查報告、內政部人口統計、國發會</td></tr>
+      <tr><td class="tag">民調/滿意度</td><td>台北市政府研考會施政滿意度調查、TVBS民調中心、遠見雜誌縣市長施政滿意度調查、天下雜誌城市治理調查、凱達格蘭基金會委託民調</td></tr>
+      <tr><td class="tag">新聞報導</td><td>聯合報、中國時報、自由時報、中央社、風傳媒、ETtoday、關鍵評論網、天下雜誌、住商/大家/台灣房屋等不動產機構統計整理報導</td></tr>
+      <tr><td class="tag">查核機構</td><td>台灣事實查核中心（社會住宅數字查核等）</td></tr>
+      <tr><td class="tag">候選人資料</td><td>候選人本人受訪內容、參選聲明全文、議會質詢紀錄；不採第三方轉述或攻防式說法（僅用於05模組）</td></tr>
+      <tr><td class="tag">百科/背景資料</td><td>維基百科（用於基本任期、得票率等可核實的背景事實，不作為評價依據）</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><span class="section-num">03</span><h2>方法論原則</h2></div>
+    <div class="principle-grid">
+      <div class="principle-card"><div class="num">PRINCIPLE 01</div><p>所有主觀評分（雷達圖分數、治理能力排序）都會標註「非官方統計或正式評鑑」，並公開推論依據，不假裝是精確測量。</p></div>
+      <div class="principle-card"><div class="num">PRINCIPLE 02</div><p>政策成果評價與治理能力評價分開處理——前者問「做了什麼、結果如何」，後者問「有沒有能力做成」，避免把運氣和能力混為一談。</p></div>
+      <div class="principle-card"><div class="num">PRINCIPLE 03</div><p>凡引用具爭議的統計數字（如社會住宅戶數、財政還債金額），優先採用事實查核機構或審計報告的說法，並保留各方統計口徑的差異，不單方面採信任何一方的宣傳說法。</p></div>
+      <div class="principle-card"><div class="num">PRINCIPLE 04</div><p>候選人比對與治理能力排序等涉及當前選舉的內容，只採候選人公開發表的政見與可核實的政績紀錄，不採第三方轉述或攻防式說法。</p></div>
+    </div>
+  </div>
+
+  <div class="section no-border">
+    <div class="section-head"><span class="section-num">04</span><h2>開發進度（誠實揭露）</h2></div>
+    <p class="section-note">跟資料方法論一樣，開發進度也公開透明——這是 Phase 1 的完成狀態，之後每個階段更新都會回來這裡同步。</p>
+    <ul class="status-list">
+      <li><span class="check done">✓</span><span><b>首頁改版</b> —— 四區塊（Hero／個人敘事／信念對照／六模組導覽）已上線。</span></li>
+      <li><span class="check done">✓</span><span><b>01 Timeline 事件顆粒度</b> —— 六任市長、每任4張重大事件卡（背景／爭議／今天重新評價）已補齊。</span></li>
+      <li><span class="check done">✓</span><span><b>03 治理能力模型說明頁</b> —— 12項能力定義＋當代優先排序圖表＋六任市長能力對照已上線。</span></li>
+      <li><span class="check done">✓</span><span><b>06 開放資料中心</b> —— 本頁面，已上線。</span></li>
+      <li><span class="check done">✓</span><span><b>02 政策資料庫 Policy Explorer（示範版）</b> —— 捷運、社會住宅、都市更新三個政策領域完整結構化資料已上線，其他政策領域待後續擴充。</span></li>
+      <li><span class="check done">✓</span><span><b>05 候選人政策比對（測驗版）</b> —— 六題政策傾向測驗已上線，涵蓋2026台北市長選舉兩位候選人目前公開可查證的立場，資料不足處誠實標示。</span></li>
+      <li><span class="check pending">○</span><span><b>04 AI城市模擬器</b> —— 規劃中，Phase 3，將以「規則式模擬」起步而非真正AI預測模型，避免誤導使用者。</span></li>
+      <li><span class="check pending">○</span><span><b>與 EcoSentinel 整合</b> —— 待定，Phase 4，需先確認對方專案的實際進度與技術棧再決定整合方式。</span></li>
+    </ul>
+  </div>
+
+</div>
+
+<footer>
+  <div class="wrap">如果你發現資料錯誤、推論站不住腳，或有更完整的資料來源，這正是這個網站存在的意義——歡迎提出。方法論只有在被挑戰、被修正的過程中才會變得更可信。</div>
+</footer>
+
+</body>
+</html>

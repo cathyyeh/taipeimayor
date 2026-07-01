@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>台北市治理檔案 1990–2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root{
+    --paper:#F1ECDF;
+    --paper-deep:#E8E0CC;
+    --ink:#231F1A;
+    --ink-soft:#5A5348;
+    --bronze:#A8763B;
+    --bronze-deep:#7C5527;
+    --rust:#B24A32;
+    --line:#C9BFA4;
+    --card:#FAF7EE;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Noto Sans TC',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:72px 0 40px;
+    border-bottom:1px solid var(--line);
+    background:
+      repeating-linear-gradient(0deg, transparent 0 39px, rgba(35,31,26,0.035) 39px 40px),
+      var(--paper);
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.18em;
+    color:var(--bronze-deep);
+    text-transform:uppercase;
+    margin-bottom:18px;
+  }
+  h1{
+    font-family:'Noto Serif TC',serif;
+    font-weight:900;
+    font-size:clamp(32px,5vw,58px);
+    line-height:1.15;
+    margin:0 0 20px;
+    letter-spacing:-0.01em;
+  }
+  h1 span{color:var(--bronze-deep);}
+  .lede{
+    font-size:17px;
+    line-height:1.85;
+    color:var(--ink-soft);
+    max-width:640px;
+    margin:0 0 28px;
+  }
+  .badge-row{display:flex;gap:10px;flex-wrap:wrap;}
+  .badge{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    padding:6px 12px;
+    border:1px solid var(--bronze);
+    border-radius:999px;
+    color:var(--bronze-deep);
+    background:rgba(168,118,59,0.08);
+  }
+
+  /* ---------- SECTION LABEL ---------- */
+  .section{padding:56px 0;}
+  .section-head{display:flex;align-items:baseline;gap:14px;margin-bottom:28px;}
+  .section-num{
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;color:var(--bronze-deep);
+    border-bottom:2px solid var(--bronze);
+    padding-bottom:2px;
+  }
+  .section h2{
+    font-family:'Noto Serif TC',serif;
+    font-weight:700;
+    font-size:26px;
+    margin:0;
+  }
+  .section-note{font-size:14px;color:var(--ink-soft);margin:-14px 0 28px;max-width:680px;line-height:1.7;}
+
+  /* ---------- TIMELINE ---------- */
+  .timeline{
+    display:flex;
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+    background:var(--card);
+  }
+  .era{
+    flex:1;
+    padding:20px 14px 18px;
+    cursor:pointer;
+    border-right:1px solid var(--line);
+    transition:background 0.2s;
+    position:relative;
+  }
+  .era:last-child{border-right:none;}
+  .era:hover{background:rgba(168,118,59,0.08);}
+  .era.active{background:var(--bronze);color:#fff;}
+  .era.active .era-term, .era.active .era-party{color:rgba(255,255,255,0.85);}
+  .era-name{
+    font-family:'Noto Serif TC',serif;
+    font-weight:700;
+    font-size:17px;
+    margin-bottom:6px;
+    white-space:nowrap;
+  }
+  .era-term{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    margin-bottom:4px;
+  }
+  .era-party{font-size:12px;color:var(--ink-soft);}
+  .era-flag{
+    position:absolute;top:8px;right:8px;
+    font-size:10px;
+    background:var(--rust);color:#fff;
+    padding:2px 6px;border-radius:4px;
+    font-family:'JetBrains Mono',monospace;
+  }
+
+  @media (max-width:760px){
+    .timeline{flex-direction:column;}
+    .era{border-right:none;border-bottom:1px solid var(--line);}
+    .era:last-child{border-bottom:none;}
+  }
+
+  /* ---------- DETAIL GRID ---------- */
+  .detail-grid{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:32px;
+    margin-top:32px;
+  }
+  @media (max-width:820px){ .detail-grid{grid-template-columns:1fr;} }
+
+  .panel{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:26px 28px;
+  }
+  .panel h3{
+    font-family:'Noto Serif TC',serif;
+    font-size:19px;margin:0 0 14px;
+  }
+  .kv{display:flex;flex-wrap:wrap;gap:8px 18px;margin-bottom:18px;}
+  .kv div{font-size:13px;color:var(--ink-soft);}
+  .kv b{color:var(--ink);font-weight:600;}
+  ul.highlights{margin:0;padding-left:0;list-style:none;}
+  ul.highlights li{
+    font-size:14px;line-height:1.7;
+    padding-left:18px;position:relative;margin-bottom:8px;
+    color:var(--ink-soft);
+  }
+  ul.highlights li::before{
+    content:"—";position:absolute;left:0;color:var(--bronze);
+  }
+  .verdict{
+    margin-top:16px;padding-top:16px;
+    border-top:1px dashed var(--line);
+    font-size:13.5px;line-height:1.75;color:var(--ink-soft);
+  }
+  .verdict b{color:var(--rust);}
+
+  /* ---------- RADAR ---------- */
+  .radar-caption{font-size:12px;color:var(--ink-soft);margin-top:10px;line-height:1.6;}
+  #radarSvg{width:100%;height:auto;}
+
+  /* ---------- DEBT CHART ---------- */
+  #debtSvg{width:100%;height:auto;}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--ink-soft);margin-top:12px;}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block;}
+
+  /* ---------- OBSERVATIONS ---------- */
+  .obs-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  @media (max-width:700px){.obs-grid{grid-template-columns:1fr;}}
+  .obs-card{
+    background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:20px 22px;
+  }
+  .obs-card .num{
+    font-family:'JetBrains Mono',monospace;color:var(--bronze-deep);font-size:12px;margin-bottom:8px;
+  }
+  .obs-card p{font-size:14px;line-height:1.75;color:var(--ink-soft);margin:0;}
+
+  footer{
+    padding:40px 0 60px;
+    border-top:1px solid var(--line);
+    font-size:12.5px;color:var(--ink-soft);line-height:1.9;
+  }
+
+  /* ---------- TOPNAV ---------- */
+  .topnav{padding:16px 0;border-bottom:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:12px;}
+  .topnav a{text-decoration:none;color:var(--ink-soft);}
+  .topnav a:hover{color:var(--bronze-deep);}
+
+  /* ---------- EVENT CARDS ---------- */
+  .event-head{margin-top:44px;margin-bottom:18px;}
+  .event-head h4{font-family:'Noto Serif TC',serif;font-size:16px;margin:0 0 6px;}
+  .event-head p{font-size:13px;color:var(--ink-soft);margin:0;}
+  .event-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  @media (max-width:700px){.event-grid{grid-template-columns:1fr;}}
+  .event-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;}
+  .event-title{font-family:'Noto Serif TC',serif;font-weight:700;font-size:15px;margin-bottom:10px;}
+  .event-field{margin-bottom:9px;}
+  .event-field .lab{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--bronze-deep);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:3px;}
+  .event-field .val{font-size:13px;color:var(--ink-soft);line-height:1.7;}
+  .event-field.reeval .val{color:var(--rust);}
+
+</style>
+</head>
+<body>
+
+<div class="topnav"><div class="wrap"><a href="index.html">← 回首頁</a> ／ 01 台北三十年 Timeline</div></div>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">台北市治理檔案 · 研究原型 v0.1</div>
+    <h1>36 年，六位市長，<br><span>一座城市怎麼被治理。</span></h1>
+    <p class="lede">從最後一任官派市長黃大洲，到現任蔣萬安——這是一份跳開藍綠標籤的政策對照紀錄。點選下方任一任期，查看交通、商業經濟、教育、社福、公共衛生等八個維度的施政剖面、財政負債走勢，以及每任市長的重大事件卡（背景／爭議／今天重新評價）。</p>
+    <div class="badge-row">
+      <span class="badge">官派 1 位</span>
+      <span class="badge">民選 5 位</span>
+      <span class="badge">跨黨派</span>
+      <span class="badge">資料持續補充中</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="section">
+    <div class="section-head"><span class="section-num">01</span><h2>選一位市長</h2></div>
+    <p class="section-note">依任期先後排列。標記「⚑」代表該任期存在明顯的「當時聲望 vs. 事後評價」落差，值得特別留意。</p>
+    <div class="timeline" id="timeline"></div>
+
+    <div class="detail-grid">
+      <div class="panel" id="detailPanel"></div>
+      <div class="panel">
+        <h3>五維施政剖面（研究團隊主觀評分）</h3>
+        <svg id="radarSvg" viewBox="0 0 380 380"></svg>
+        <div class="radar-caption">評分為 1–5 分，依本研究整理的文字資料綜合判斷，<b>非官方統計或正式評鑑</b>，用途是提供討論起點，歡迎質疑與修正。</div>
+      </div>
+    </div>
+
+    <div class="event-head">
+      <h4>這任市長的重大事件卡</h4>
+      <p>每張卡只填三欄：背景、當時的爭議、今天重新評價——顆粒度比「整任市長」更細，方便對照單一事件的長期評價變化。</p>
+    </div>
+    <div class="event-grid" id="eventGrid"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><span class="section-num">02</span><h2>財政負債走勢（1994–2023）</h2></div>
+    <p class="section-note">單位：億元。虛線區塊代表各任市長任期，方便對照「誰在任內舉債、誰在還債」。2026 年最新數據請以台北市財政局公告為準，本圖尚未更新至最新月份。</p>
+    <div class="panel">
+      <svg id="debtSvg" viewBox="0 0 900 380"></svg>
+      <div class="legend">
+        <span><span class="dot" style="background:#B24A32"></span>負債（億元）</span>
+        <span><span class="dot" style="background:#A8763B"></span>任期分界</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><span class="section-num">03</span><h2>跨任期觀察</h2></div>
+    <div class="obs-grid" id="obsGrid"></div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    資料來源：台北市政府全球資訊網、台北市政府財政局新聞稿、審計部決算審查報告、聯合報／中國時報／天下雜誌／風傳媒／ETtoday／關鍵評論網等公開報導，以及台灣事實查核中心查核報告。五維評分為研究團隊依上述資料綜合整理後的主觀判斷，非任何官方或學術評鑑分數，僅供網站討論之用，歡迎持續補充與修正。本頁為第一版原型，尚未納入完整逐年客觀指標（空氣品質、交通事故率、社福支出占比等），詳見研究文件〈台北市長30年政策回顧研究〉第8節「待補充資料」。
+  </div>
+</footer>
+
+<script>
+const mayors = [
+  {
+    name:"黃大洲", party:"官派 · 國民黨提名", term:"1990–1994", flag:true,
+    kv:[["身分","官派市長（非民選）"],["卸任後","1994年參選首屆民選市長，落居第三"]],
+    highlights:[
+      "捷運「六線齊發」同步動工，是台北捷運真正大興土木的起點",
+      "拆除8棟中華商場，過程抗爭規模空前",
+      "拆除七號公園違建，改建為大安森林公園（拆遷逾2,600戶）",
+      "基隆河截彎取直，奠定內湖科學園區與河濱公園基礎"
+    ],
+    verdict:"當時聲望低、選舉落敗，但近年多篇回顧文章重新評價其建設「奠定台北三十年基礎」。<b>是本研究中「當時民調」與「事後評價」落差最大的案例。</b>",
+    radar:{"交通":5,"商業經濟":3,"教育":2,"社福":3,"環境衛生":4,"都市更新":3,"人口移入意願":4,"國際參與":2},
+    events:[
+      {title:"捷運「六線齊發」動工", background:"捷運研議規劃逾10年，僅北投機廠於1988年動工，黃大洲上任後大規模同步開挖六條路線。", controversy:"拆遷抗爭、交通黑暗期衝擊商家，選舉時對手（含陳水扁）曾主張「當選就拆捷運」。", reeval:"台北捷運路網成為城市代表性基礎設施，日運量突破百萬，普遍被追認為關鍵政績。"},
+      {title:"大安森林公園（拆七號公園違建）", background:"原為眷村與違建聚集地，黃大洲拆遷逾2,600戶改建為公園。", controversy:"拆遷戶抗爭激烈，黃大洲本人與家人曾遭恐嚇威脅。", reeval:"全台最具代表性的都市森林公園之一，是「當年被罵、多年後被感謝」敘事的核心案例。"},
+      {title:"拆除中華商場", background:"西門町一帶老舊商場，市容髒亂，黃大洲決定全面拆除。", controversy:"商家安置、補償與抗爭規模空前，是歷來拆遷案中最大規模之一。", reeval:"中華路市容脫離髒亂，被視為都市更新前身的成功案例。"},
+      {title:"基隆河截彎取直", background:"針對大直、內湖河段進行截彎取直工程與新生地開發。", controversy:"部分水利專家質疑工程方案，批評聲浪不小。", reeval:"為內湖科學園區與河濱公園奠定基礎，內科現已是台北市稅收樞紐之一。"}
+    ],
+  },
+  {
+    name:"陳水扁", party:"民主進步黨", term:"1994–1998",flag:true,
+    kv:[["當選得票率","43.67%"],["連任結果","45.91%，敗選"],["任內滿意度","一度近八成"]],
+    highlights:[
+      "接手捷運亂局，首條路線（木柵線）通車",
+      "首都掃黃掃黑，加強治安與公務員風氣改革",
+      "台北101（BOT模式首例）任內促成，實際完工在後續市長任內",
+      "任內減少負債約34億元"
+    ],
+    verdict:"滿意度極高卻連任失敗，是「施政滿意度不等於選票」的經典案例。部分建設歸屬（環東大道、垃圾隨袋徵收）與後任<b>存在爭議</b>。",
+    radar:{"交通":3,"商業經濟":3,"教育":2,"社福":4,"環境衛生":4,"都市更新":2,"人口移入意願":4,"國際參與":2},
+    events:[
+      {title:"捷運木柵線通車", background:"接手前任留下的捷運工程亂局，首條捷運路線在其任內通車。", controversy:"通車初期發生技術故障（俗稱「火燒車」事件），一度成為笑話。", reeval:"象徵台北捷運時代正式開啟，但後續大規模路網建設多在後任市長任內完成。"},
+      {title:"首都掃黃掃黑", background:"鐵腕整頓治安，取締特種行業、電子遊樂場，加強公務員風氣改革。", controversy:"部分執法手段被質疑過當。", reeval:"普遍被視為有效提升治安觀感、改變「政府為衙門」形象的政績。"},
+      {title:"拔河斷臂事件", background:"市府新聞處策劃大型拔河活動作為城市行銷手法之一。", controversy:"繩索繃斷造成數十人受傷、2人斷臂，透過媒體轉播震驚社會。", reeval:"常被引用為市府大型活動規劃疏於風險評估的負面案例。"},
+      {title:"台北101（BOT模式促成）", background:"全台第一個以BOT模式發展的重大建設項目。", controversy:"實際完工於後續市長任內，政績歸屬存在爭議。", reeval:"已成為台北地標，但「誰的政績」的爭論至今未完全平息。"}
+    ],
+  },
+  {
+    name:"馬英九", party:"中國國民黨", term:"1998–2006",
+    kv:[["首次當選","51.13%"],["連任得票率","64.11%（歷來最高）"],["任內滿意度","多次逾70–79%"]],
+    highlights:[
+      "捷運路網大幅擴張、河濱自行車道系統",
+      "悠遊卡全面推廣、垃圾費隨袋徵收（獲亞洲廢棄物管理獎）",
+      "經歷921大地震、納莉風災、SARS，建立防災與國際搜救機制",
+      "8年間市府負債增加約1,332億元"
+    ],
+    verdict:"形象與民調雙高，但財政負債同期大幅攀升，是「政績亮麗 vs. 財政永續」討論的重要對照案例。內湖捷運、台北巨蛋等承諾項目跳票。",
+    radar:{"交通":4,"商業經濟":3,"教育":2,"社福":3,"環境衛生":4,"都市更新":2,"人口移入意願":3,"國際參與":3},
+    events:[
+      {title:"悠遊卡全面推廣", background:"票證整合，市府提供場地開放廠商營運電子票證系統。", controversy:"部分批評認為市府僅提供場地，並非主導開發。", reeval:"已成為台灣電子支付代表性基礎設施，普遍視為便民政績。"},
+      {title:"建成圓環改造", background:"競選承諾「反轉軸線、改造舊市區」的旗艦案例，斥資改建圓環。", controversy:"改造後經營慘淡，一年內即歇業。", reeval:"是承諾跳票的代表案例，玻璃帷幕閒置多年，後由柯文哲拆除改建為小公園。"},
+      {title:"921大地震與SARS應對", background:"上任第二年遇921大地震，任內又逢SARS疫情、和平醫院封院事件。", controversy:"和平醫院封院決策時機與溝通方式遭到批評。", reeval:"建立台北國際搜救隊等後續防災機制，但SARS封院決策仍常被提起作為溝通不足的案例。"},
+      {title:"垃圾費隨袋徵收", background:"市議會早年決議推動的垃圾處理制度改革。", controversy:"部分批評推動延宕多年才真正上路。", reeval:"獲2001年亞洲廢棄物管理傑出獎，普遍被視為有效的環保政策。"}
+    ],
+  },
+  {
+    name:"郝龍斌", party:"中國國民黨", term:"2006–2014",
+    kv:[["連任結果","大勝對手17萬票"],["主觀滿意度","長期低於外界評比與國際獎項"]],
+    highlights:[
+      "YouBike上線（前30分免費，滿意度達93%）",
+      "2010台北花博（896萬參觀人次，430億經濟效益）",
+      "爭取2017世大運主辦權（實際舉辦於下任柯文哲任內）",
+      "捷運文湖線初期故障頻繁、貓空纜車長期停駛，是知名負面案例"
+    ],
+    verdict:"網路輿論普遍評價「溫和、無明顯過失，但缺乏記憶點」。任內為多項大型活動合計砍樹逾3,000株，環保爭議與活動成效並存。",
+    radar:{"交通":4,"商業經濟":4,"教育":2,"社福":3,"環境衛生":3,"都市更新":3,"人口移入意願":3,"國際參與":5},
+    events:[
+      {title:"台北花博", background:"2010年舉辦，是台北首次獲國際授權舉辦的世界級博覽會。", controversy:"為辦花博砍除新生公園逾千棵樹，引發環保爭議。", reeval:"896萬參觀人次、430億經濟效益，普遍視為成功案例，但環保爭議也被完整記錄下來。"},
+      {title:"YouBike上線", background:"推出公共自行車系統，前30分鐘免費使用。", controversy:"免費優惠後由柯文哲取消，取消後使用量立即下滑約20%。", reeval:"上線初期滿意度高達93%，是六任市長中少數幾乎無爭議的高評價政策。"},
+      {title:"貓空纜車事故停駛", background:"貓空纜車因塔柱掏空事件被迫暫停營業。", controversy:"高成本纜車長期停駛，民眾與議會多有批評。", reeval:"常被列為任內知名負面案例，凸顯大型觀光硬體的維運風險。"},
+      {title:"爭取2017世大運主辦權", background:"2011年市府代表團赴比利時爭取主辦權並成功取得。", controversy:"無明顯爭議，屬於外交/爭取型政績。", reeval:"實際舉辦於下任柯文哲任內，是「政績接棒」最常被引用的經典案例。"}
+    ],
+  },
+  {
+    name:"柯文哲", party:"無黨籍 → 台灣民眾黨", term:"2014–2022",flag:true,
+    kv:[["首任滿意度","高企"],["第二任滿意度","一度六都墊底"],["財政","首任4年還債570億元，第二任未再還債"]],
+    highlights:[
+      "西區門戶計畫（拆忠孝橋引道、北門重現）",
+      "社會住宅為招牌政策，任內確切新完工約5,000餘戶（各方統計口徑爭議大）",
+      "停車格全面收費、取消YouBike前30分免費，引發爭議",
+      "大巨蛋爭議貫穿兩任任期，卸任後仍未完工"
+    ],
+    verdict:"第一任與第二任滿意度落差明顯，學者歸因於「市政與黨政分際不清」。社宅數字是事實查核中心多次查核焦點，<b>凸顯政績量化容易各自解讀</b>。",
+    radar:{"交通":3,"商業經濟":4,"教育":3,"社福":4,"環境衛生":4,"都市更新":4,"人口移入意願":2,"國際參與":4},
+    events:[
+      {title:"西區門戶計畫（拆忠孝橋引道）", background:"6天內拆除忠孝橋引道，讓北門風華再現，重整台北車站周邊動線。", controversy:"工程時程極為緊迫，引發部分安全與交通衝擊質疑。", reeval:"普遍被視為市容改造的成功案例。"},
+      {title:"社會住宅政策", background:"選前提出「8年5萬戶」承諾，任內以社會住宅為招牌政策。", controversy:"進度不及預期，且社宅戶數統計口徑各方爭議大，事實查核中心多次查核。", reeval:"數量仍為六都之首，但成為「政績量化各自表述」的典型案例。"},
+      {title:"大巨蛋停工復工", background:"因防火避難性能審查要求，大巨蛋工程一度停工長達5年。", controversy:"柯文哲指控中央「卡蛋」，各方責任歸屬拉鋸多年。", reeval:"卸任後仍未完工，直到蔣萬安任內才正式啟用，是政績接棒最極端的案例。"},
+      {title:"京華城容積案（卸任後爆發）", background:"市長任內審批的都市更新容積獎勵案。", controversy:"卸任後被控圖利廠商，遭起訴並判刑，成為重大司法案件。", reeval:"對其市政遺產評價造成重大陰影，也是廉政與透明能力評估的關鍵案例。"}
+    ],
+  },
+  {
+    name:"蔣萬安", party:"中國國民黨", term:"2022–現任",
+    kv:[["2026年滿意度","約58–69%區間波動"],["2026選戰民調","對沈伯洋領先約23–28個百分點"],["財政","上任後持續減債，人均負債降至約3.3萬元"]],
+    highlights:[
+      "促成輝達（NVIDIA）台灣總部落腳北士科",
+      "台北大巨蛋正式啟用（馬英九規劃、柯文哲延宕、蔣萬安完工）",
+      "營養午餐全面免費，被其他縣市跟進效法",
+      "捷運六線齊發施工、都更八箭（報核案件數為過去8年2.3倍）"
+    ],
+    verdict:"任期未滿，事後評價資料尚不完整；2026年鼠患議題顯示「危機處理信心」與「整體滿意度」出現落差，值得後續追蹤。",
+    radar:{"交通":4,"商業經濟":5,"教育":4,"社福":3,"環境衛生":3,"都市更新":5,"人口移入意願":2,"國際參與":4},
+    events:[
+      {title:"輝達（NVIDIA）進駐北士科", background:"促成輝達台灣總部落腳北士科T17/T18用地。", controversy:"周邊用電需求引發變電所地下化等基礎設施爭議。", reeval:"任內最常被提及的政績，但長期經濟外溢效益仍待時間觀察。"},
+      {title:"台北大巨蛋啟用", background:"歷經馬英九規劃、柯文哲任內長期延宕後，終於在蔣萬安任內完工。", controversy:"三代市長政績接棒的代表案例，過去的爭議歷史仍常被提起。", reeval:"完工開幕普遍被視為蔣萬安任內具體政績之一。"},
+      {title:"營養午餐全面免費", background:"針對中小學生推出的教育福利政策。", controversy:"財政負擔的長期永續性尚待觀察。", reeval:"已被其他縣市（含綠營執政縣市）跟進效法，是少見的跨黨派參考案例。"},
+      {title:"2026年鼠患危機", background:"台北市爆發鼠患問題，含漢他病毒死亡案例，市府推出鼠類偵防師等應對措施。", controversy:"民調顯示「認為問題嚴重49.2% vs. 認為市長有能力解決39.4%」的信心落差。", reeval:"事件仍在發展中，是危機處理能力的即時檢驗案例，尚無定論。"}
+    ],
+  }
+];
+
+const dims = ["交通","商業經濟","教育","社福","環境衛生","都市更新","人口移入意願","國際參與"];
+
+/* ---------------- TIMELINE ---------------- */
+const timelineEl = document.getElementById('timeline');
+mayors.forEach((m,i)=>{
+  const el = document.createElement('div');
+  el.className = 'era' + (i===0?' active':'');
+  el.dataset.i = i;
+  el.innerHTML = `${m.flag?'<div class="era-flag">⚑</div>':''}
+    <div class="era-name">${m.name}</div>
+    <div class="era-term">${m.term}</div>
+    <div class="era-party">${m.party}</div>`;
+  el.addEventListener('click', ()=>selectMayor(i));
+  timelineEl.appendChild(el);
+});
+
+function selectMayor(i){
+  document.querySelectorAll('.era').forEach((e,idx)=>e.classList.toggle('active', idx===i));
+  const m = mayors[i];
+  document.getElementById('detailPanel').innerHTML = `
+    <h3>${m.name}　<span style="font-size:13px;color:var(--ink-soft);font-weight:400;">${m.term}</span></h3>
+    <div class="kv">${m.kv.map(p=>`<div><b>${p[0]}</b>：${p[1]}</div>`).join('')}</div>
+    <ul class="highlights">${m.highlights.map(h=>`<li>${h}</li>`).join('')}</ul>
+    <div class="verdict">${m.verdict}</div>
+  `;
+  drawRadar(m.radar);
+
+  document.getElementById('eventGrid').innerHTML = (m.events||[]).map(ev=>`
+    <div class="event-card">
+      <div class="event-title">${ev.title}</div>
+      <div class="event-field"><span class="lab">背景</span><div class="val">${ev.background}</div></div>
+      <div class="event-field"><span class="lab">當時的爭議</span><div class="val">${ev.controversy}</div></div>
+      <div class="event-field reeval"><span class="lab">今天重新評價</span><div class="val">${ev.reeval}</div></div>
+    </div>
+  `).join('');
+}
+
+/* ---------------- RADAR CHART ---------------- */
+function drawRadar(scores){
+  const svg = document.getElementById('radarSvg');
+  const cx=190, cy=190, R=118;
+  const N = dims.length;
+  const angle = i => (Math.PI*2*i/N) - Math.PI/2;
+
+  let rings = '';
+  for(let r=1;r<=5;r++){
+    let pts = dims.map((d,i)=>{
+      const rad = R*r/5;
+      const x = cx + rad*Math.cos(angle(i));
+      const y = cy + rad*Math.sin(angle(i));
+      return `${x},${y}`;
+    }).join(' ');
+    rings += `<polygon points="${pts}" fill="none" stroke="#C9BFA4" stroke-width="${r===5?1.4:0.7}" opacity="${r===5?0.9:0.5}"/>`;
+  }
+
+  let spokes='';
+  let labels='';
+  dims.forEach((d,i)=>{
+    const labelR = R + (d.length>=5 ? 34 : 26);
+    const x = cx + labelR*Math.cos(angle(i));
+    const y = cy + labelR*Math.sin(angle(i));
+    const x2 = cx + R*Math.cos(angle(i));
+    const y2 = cy + R*Math.sin(angle(i));
+    spokes += `<line x1="${cx}" y1="${cy}" x2="${x2}" y2="${y2}" stroke="#C9BFA4" stroke-width="0.7" opacity="0.6"/>`;
+    labels += `<text x="${x}" y="${y}" font-size="11" fill="#5A5348" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans TC, sans-serif">${d}</text>`;
+  });
+
+  const dataPts = dims.map((d,i)=>{
+    const val = scores[d]||0;
+    const rad = R*val/5;
+    const x = cx + rad*Math.cos(angle(i));
+    const y = cy + rad*Math.sin(angle(i));
+    return `${x},${y}`;
+  }).join(' ');
+
+  svg.innerHTML = `
+    ${rings}${spokes}
+    <polygon points="${dataPts}" fill="#A8763B" fill-opacity="0.28" stroke="#7C5527" stroke-width="2"/>
+    ${dims.map((d,i)=>{
+      const val = scores[d]||0;
+      const rad = R*val/5;
+      const x = cx + rad*Math.cos(angle(i));
+      const y = cy + rad*Math.sin(angle(i));
+      return `<circle cx="${x}" cy="${y}" r="3.5" fill="#7C5527"/>`;
+    }).join('')}
+    ${labels}
+  `;
+}
+
+selectMayor(0);
+
+/* ---------------- DEBT CHART ---------------- */
+const debtData = [
+  {year:1994, debt:1116, label:"黃大洲卸任"},
+  {year:1998, debt:1083, label:"陳水扁卸任"},
+  {year:2002, debt:1633, label:"馬英九連任"},
+  {year:2006, debt:2414, label:"馬英九卸任"},
+  {year:2014, debt:1469, label:"郝龍斌卸任"},
+  {year:2018, debt:898,  label:"柯文哲首任末"},
+  {year:2022, debt:898,  label:"柯文哲卸任"},
+  {year:2023, debt:824,  label:"蔣萬安（上任後）"}
+];
+
+function drawDebtChart(){
+  const svg = document.getElementById('debtSvg');
+  const W=900,H=380, padL=70,padR=30,padT=30,padB=50;
+  const years = debtData.map(d=>d.year);
+  const minY = 1990, maxY = 2024;
+  const minD = 0, maxD = 2600;
+
+  const xScale = y => padL + (y-minY)/(maxY-minY)*(W-padL-padR);
+  const yScale = d => H-padB - (d-minD)/(maxD-minD)*(H-padT-padB);
+
+  // era bands
+  const eras = [
+    {from:1990,to:1994,name:"黃"},
+    {from:1994,to:1998,name:"扁"},
+    {from:1998,to:2006,name:"馬"},
+    {from:2006,to:2014,name:"郝"},
+    {from:2014,to:2022,name:"柯"},
+    {from:2022,to:2026,name:"蔣"}
+  ];
+  let bands = eras.map((e,i)=>{
+    const x1 = xScale(Math.max(e.from,minY));
+    const x2 = xScale(Math.min(e.to,maxY));
+    const fill = i%2===0 ? "rgba(168,118,59,0.05)" : "rgba(168,118,59,0.11)";
+    const midx = (x1+x2)/2;
+    return `<rect x="${x1}" y="${padT}" width="${x2-x1}" height="${H-padT-padB}" fill="${fill}"/>
+            <text x="${midx}" y="${padT+18}" font-size="12" fill="#7C5527" text-anchor="middle" font-family="JetBrains Mono, monospace">${e.name}</text>`;
+  }).join('');
+
+  // gridlines Y
+  let grid='';
+  for(let d=0; d<=maxD; d+=500){
+    const y = yScale(d);
+    grid += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#C9BFA4" stroke-width="0.6" opacity="0.5"/>
+              <text x="${padL-10}" y="${y+4}" font-size="11" fill="#5A5348" text-anchor="end" font-family="JetBrains Mono, monospace">${d}</text>`;
+  }
+
+  // line path
+  const pathD = debtData.map((d,i)=>`${i===0?'M':'L'} ${xScale(d.year)} ${yScale(d.debt)}`).join(' ');
+
+  // points + labels
+  let points = debtData.map(d=>{
+    const x=xScale(d.year), y=yScale(d.debt);
+    return `<circle cx="${x}" cy="${y}" r="4.5" fill="#B24A32"/>
+            <text x="${x}" y="${y-12}" font-size="11" fill="#231F1A" text-anchor="middle" font-family="JetBrains Mono, monospace">${d.debt}</text>
+            <text x="${x}" y="${H-padB+18}" font-size="10.5" fill="#5A5348" text-anchor="middle" font-family="JetBrains Mono, monospace">${d.year}</text>`;
+  }).join('');
+
+  svg.innerHTML = `${bands}${grid}
+    <path d="${pathD}" fill="none" stroke="#B24A32" stroke-width="2.2"/>
+    ${points}
+    <text x="${padL}" y="${padT-10}" font-size="11" fill="#5A5348" font-family="Noto Sans TC, sans-serif">單位：億元</text>
+  `;
+}
+drawDebtChart();
+
+/* ---------------- OBSERVATIONS ---------------- */
+const observations = [
+  "短期民調與長期歷史評價可能完全相反——黃大洲任內聲望低、選舉落敗，卻在20–30年後被廣泛追認為「奠定台北基礎」的市長。",
+  "「政績接棒」是常態，不是例外——捷運路網、大巨蛋、世大運場館，幾乎每一項大型建設都跨越至少兩任市長。",
+  "民調高峰與連任結果不一定相關——陳水扁高滿意度卻連任失敗（1998），顯示地方選舉受政黨版圖、對手強弱等因素影響。",
+  "黨政分際模糊會侵蝕市政滿意度——柯文哲第二任期、蔣萬安目前都面臨「是否過度介入全國政治議題」的類似檢驗。",
+  "環境／永續政策長期被邊緣化——多任市長的環境政策多附屬於大型建設（花博、世大運附帶大量砍樹）。",
+  "政績量化容易各自解讀——大巨蛋、社宅戶數、YouBike使用率，都曾出現「同一數字、各自表述」的情況。"
+];
+document.getElementById('obsGrid').innerHTML = observations.map((o,i)=>`
+  <div class="obs-card"><div class="num">OBS. ${String(i).padStart(2,'0')}</div><p>${o}</p></div>
+`).join('');
+</script>
+
+</body>
+</html>

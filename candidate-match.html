@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>候選人政策比對 — Taipei Governance Lab</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap');
+  :root{
+    --paper:#F1ECDF; --ink:#231F1A; --ink-soft:#5A5348;
+    --bronze:#A8763B; --bronze-deep:#7C5527; --rust:#B24A32;
+    --line:#C9BFA4; --card:#FAF7EE;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Noto Sans TC',sans-serif;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:820px;margin:0 auto;padding:0 24px;}
+  a{color:var(--bronze-deep);}
+
+  .topnav{padding:16px 0;border-bottom:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:12px;}
+  .topnav a{text-decoration:none;color:var(--ink-soft);}
+  .topnav a:hover{color:var(--bronze-deep);}
+
+  .hero{padding:52px 0 36px;border-bottom:1px solid var(--line);
+    background:repeating-linear-gradient(0deg, transparent 0 39px, rgba(35,31,26,0.035) 39px 40px), var(--paper);}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:var(--bronze-deep);text-transform:uppercase;margin-bottom:16px;}
+  h1{font-family:'Noto Serif TC',serif;font-weight:900;font-size:clamp(26px,4.2vw,38px);line-height:1.35;margin:0 0 18px;}
+  .lede{font-size:15.5px;line-height:1.9;color:var(--ink-soft);margin:0;}
+  .lede b{color:var(--ink);}
+
+  .callout{background:rgba(168,118,59,0.08);border:1px solid var(--bronze);border-radius:10px;padding:16px 20px;font-size:13px;line-height:1.8;color:var(--ink-soft);margin-top:20px;}
+
+  .section{padding:40px 0;}
+  .q-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:24px 26px;margin-bottom:18px;}
+  .q-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--bronze-deep);text-transform:uppercase;margin-bottom:10px;}
+  .q-text{font-family:'Noto Serif TC',serif;font-size:16px;font-weight:700;line-height:1.7;margin-bottom:18px;}
+  .scale{display:flex;justify-content:space-between;gap:6px;}
+  .scale label{
+    flex:1;text-align:center;font-size:11.5px;color:var(--ink-soft);cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+  }
+  .scale input{width:18px;height:18px;accent-color:var(--bronze);cursor:pointer;}
+  .scale-end{font-size:10.5px;color:var(--ink-soft);display:flex;justify-content:space-between;margin-top:6px;}
+
+  .submit-btn{
+    font-family:'Noto Serif TC',serif;font-weight:700;font-size:15px;
+    background:var(--bronze);color:#fff;border:none;border-radius:999px;
+    padding:14px 32px;cursor:pointer;display:block;margin:32px auto 0;
+    transition:background .15s;
+  }
+  .submit-btn:hover{background:var(--bronze-deep);}
+
+  /* results */
+  #results{display:none;}
+  .result-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px 24px;margin-bottom:16px;}
+  .result-dim{font-family:'Noto Serif TC',serif;font-weight:700;font-size:16px;margin-bottom:14px;}
+  .stance-row{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+  .stance-track{flex:1;height:8px;background:var(--paper-deep,#E8E0CC);border-radius:4px;position:relative;border:1px solid var(--line);}
+  .stance-dot{position:absolute;top:-5px;width:18px;height:18px;border-radius:50%;background:var(--bronze);border:2px solid #fff;box-shadow:0 0 0 1px var(--bronze-deep);transform:translateX(-50%);}
+  .stance-label{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--ink-soft);}
+
+  .cand-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:600px){.cand-grid{grid-template-columns:1fr;}}
+  .cand-box{border:1px solid var(--line);border-radius:8px;padding:14px 16px;background:var(--paper);}
+  .cand-name{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--bronze-deep);text-transform:uppercase;margin-bottom:8px;}
+  .cand-pos{font-size:13px;line-height:1.7;color:var(--ink-soft);}
+  .cand-pos.thin{color:var(--rust);font-style:italic;}
+  .src{font-size:10.5px;color:var(--ink-soft);opacity:0.75;margin-top:6px;display:block;}
+
+  footer{padding:36px 0 60px;font-size:12px;color:var(--ink-soft);line-height:1.9;}
+</style>
+</head>
+<body>
+
+<div class="topnav"><div class="wrap"><a href="index.html">← 回首頁</a> ／ 05 候選人政策比對</div></div>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Candidate Match · Phase 2 測驗版</div>
+    <h1>先想清楚你相信什麼，<br>再看誰的立場跟你接近。</h1>
+    <p class="lede">下面六題不會出現候選人名字。回答完之後，你會先看到自己在六個政策維度上的傾向，接著才對照<b>2026台北市長選舉</b>兩位候選人目前公開可查證的立場——如果某個維度找不到候選人的具體發言，我們會直接標示「資料不足」，不會替他們編造立場。</p>
+    <div class="callout">
+      這份比對只涵蓋<b style="color:var(--ink);">蔣萬安（尋求連任）</b>與<b style="color:var(--ink);">沈伯洋（民進黨徵召）</b>兩位候選人，資料截至2026年中。候選人的政見會隨選戰進展持續發表，本頁會盡量更新，但請以候選人本人最新公開發言為準。
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="section" id="quiz"></div>
+  <button class="submit-btn" onclick="showResults()">查看我的政策傾向與候選人對照</button>
+
+  <div class="section" id="results"></div>
+</div>
+
+<footer>
+  <div class="wrap">方法論：只採候選人公開發表的政見、受訪內容或議會質詢紀錄，不採第三方轉述或攻防式說法。完整資料來源見<a href="open-data.html">06 開放資料中心</a>。</div>
+</footer>
+
+<script>
+const questions = [
+  {
+    dim:"都市更新與住宅",
+    text:"都市更新的推動速度，應該優先於保留老舊社區原本的樣貌與居住型態。",
+    candidates:{
+      jiang:{pos:"明確主張加速審議、擴大容積獎勵，任內推動「都更八箭」，報核案件數為過去8年2.3倍。", src:"聯合新聞網, 2025/11", thin:false},
+      shen:{pos:"尚未查得具體都市更新政見。", src:"", thin:true}
+    }
+  },
+  {
+    dim:"科技招商的配套要求",
+    text:"科技招商案（例如輝達進駐北士科）應該附帶要求企業投資在地人才培育與基礎設施配套，而不只是提供土地與稅務優惠。",
+    candidates:{
+      jiang:{pos:"公開論述聚焦招商成果本身（輝達進駐、大巨蛋啟用）作為具體政績，被對手批評缺乏後續產業聚落與人才配套的規劃說明。", src:"聯合新聞網, 2026/5", thin:false},
+      shen:{pos:"明確主張輝達案不能只看硬體，應發展成「實質科技聚落」，並質疑周邊住宅供給與人才數量是否跟上招商宣稱的規模，要求加速變電所地下化等能源配套。", src:"聯合新聞網／Yahoo新聞, 2026/5", thin:false}
+    }
+  },
+  {
+    dim:"公共衛生危機處理",
+    text:"面對公共衛生危機（例如2026年鼠患問題），市府應優先建立長期防治制度，而非短期加派人力應急。",
+    candidates:{
+      jiang:{pos:"推出「鼠類偵防師」與12行政區清消等措施，屬短期應對；民調顯示市民對其長期解決能力的信心（39.4%）低於問題嚴重度的認知（49.2%）。", src:"TVBS民調／凱達格蘭基金會民調, 2026/5", thin:false},
+      shen:{pos:"尚未查得針對鼠患問題的具體政見主張。", src:"", thin:true}
+    }
+  },
+  {
+    dim:"交通治理",
+    text:"交通治理的重點應該放在持續建置更多硬體（路網、停車空間），而不是調整既有制度（路權分配、定價機制）。",
+    candidates:{
+      jiang:{pos:"持續推動捷運六線齊發等硬體建設路線，交通政策論述以既有工程進度為主。", src:"中央社, 2025/12", thin:false},
+      shen:{pos:"參選聲明中提及「改善交通路網，讓通勤族省下時間」，屬原則性主張，尚未查得具體制度改革方案。", src:"沈伯洋參選聲明, 2026/5", thin:false}
+    }
+  },
+  {
+    dim:"財政紀律",
+    text:"城市建設的優先順序應該以財政穩健為前提，即使會因此拖慢建設速度。",
+    candidates:{
+      jiang:{pos:"持續推動減債，任內人均負債降至約3.3萬元，公開強調財政紀律。", src:"聯合新聞網, 2023/8", thin:false},
+      shen:{pos:"尚未查得具體財政政見主張。", src:"", thin:true}
+    }
+  },
+  {
+    dim:"重大決策透明度",
+    text:"即使會拖慢決策速度，市府重大決策（例如都更容積獎勵案）都應該公開完整審議過程供市民檢視。",
+    candidates:{
+      jiang:{pos:"尚未查得針對決策透明機制的具體政見主張。", src:"", thin:true},
+      shen:{pos:"尚未查得針對決策透明機制的具體政見主張。", src:"", thin:true}
+    }
+  }
+];
+
+const quizEl = document.getElementById('quiz');
+questions.forEach((q,i)=>{
+  const card = document.createElement('div');
+  card.className = 'q-card';
+  card.innerHTML = `
+    <div class="q-num">Q${i+1} · ${q.dim}</div>
+    <div class="q-text">${q.text}</div>
+    <div class="scale">
+      ${[1,2,3,4,5].map(v=>`<label><input type="radio" name="q${i}" value="${v}" ${v===3?'checked':''}></label>`).join('')}
+    </div>
+    <div class="scale-end"><span>非常不同意</span><span>非常同意</span></div>
+  `;
+  quizEl.appendChild(card);
+});
+
+function showResults(){
+  const resultsEl = document.getElementById('results');
+  let html = `<h2 style="font-family:'Noto Serif TC',serif;font-size:22px;margin-bottom:6px;">你的政策傾向對照</h2>
+  <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:26px;line-height:1.8;">左側是「非常不同意」，右側是「非常同意」，你的位置用圓點標示。下方兩欄是候選人目前公開可查證的立場，斜體紅字代表資料不足。</p>`;
+
+  questions.forEach((q,i)=>{
+    const val = parseInt(document.querySelector(`input[name="q${i}"]:checked`).value);
+    const pct = (val-1)/4*100;
+    html += `
+      <div class="result-card">
+        <div class="result-dim">${q.dim}</div>
+        <div class="stance-row">
+          <span class="stance-label">不同意</span>
+          <div class="stance-track"><div class="stance-dot" style="left:${pct}%;"></div></div>
+          <span class="stance-label">同意</span>
+        </div>
+        <div class="cand-grid">
+          <div class="cand-box">
+            <div class="cand-name">蔣萬安（現任，尋求連任）</div>
+            <div class="cand-pos ${q.candidates.jiang.thin?'thin':''}">${q.candidates.jiang.pos}</div>
+            ${q.candidates.jiang.src?`<span class="src">來源：${q.candidates.jiang.src}</span>`:''}
+          </div>
+          <div class="cand-box">
+            <div class="cand-name">沈伯洋（民進黨徵召）</div>
+            <div class="cand-pos ${q.candidates.shen.thin?'thin':''}">${q.candidates.shen.pos}</div>
+            ${q.candidates.shen.src?`<span class="src">來源：${q.candidates.shen.src}</span>`:''}
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  html += `<div class="callout" style="margin-top:20px;">這個對照表刻意不計算「相似度百分比」——六題裡有三題其中至少一位候選人的立場資料不足，硬算百分比只會製造虛假的精確感。建議把這個結果當成「還可以繼續追問候選人哪些具體問題」的清單，而不是投票建議。</div>`;
+
+  resultsEl.innerHTML = html;
+  resultsEl.style.display = 'block';
+  resultsEl.scrollIntoView({behavior:'smooth'});
+}
+</script>
+
+</body>
+</html>

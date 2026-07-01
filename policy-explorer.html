@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>政策資料庫 — Taipei Governance Lab</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap');
+  :root{
+    --paper:#F1ECDF; --ink:#231F1A; --ink-soft:#5A5348;
+    --bronze:#A8763B; --bronze-deep:#7C5527; --rust:#B24A32;
+    --line:#C9BFA4; --card:#FAF7EE;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Noto Sans TC',sans-serif;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+  a{color:var(--bronze-deep);}
+
+  .topnav{padding:16px 0;border-bottom:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:12px;}
+  .topnav a{text-decoration:none;color:var(--ink-soft);}
+  .topnav a:hover{color:var(--bronze-deep);}
+
+  .hero{padding:56px 0 36px;border-bottom:1px solid var(--line);
+    background:repeating-linear-gradient(0deg, transparent 0 39px, rgba(35,31,26,0.035) 39px 40px), var(--paper);}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:var(--bronze-deep);text-transform:uppercase;margin-bottom:16px;}
+  h1{font-family:'Noto Serif TC',serif;font-weight:900;font-size:clamp(28px,4.6vw,42px);line-height:1.3;margin:0 0 18px;max-width:640px;}
+  .lede{font-size:16px;line-height:1.9;color:var(--ink-soft);max-width:640px;margin:0;}
+
+  /* tabs */
+  .tabbar{display:flex;gap:10px;padding:24px 0;border-bottom:1px solid var(--line);flex-wrap:wrap;}
+  .tab{
+    font-family:'Noto Serif TC',serif;font-weight:700;font-size:14.5px;
+    padding:10px 18px;border-radius:999px;border:1px solid var(--line);
+    background:var(--card);color:var(--ink-soft);cursor:pointer;transition:all .15s;
+  }
+  .tab.active{background:var(--bronze);color:#fff;border-color:var(--bronze);}
+  .tab:hover:not(.active){border-color:var(--bronze);color:var(--bronze-deep);}
+
+  .section{padding:40px 0;}
+  .policy-head{margin-bottom:26px;}
+  .policy-head .tag{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--bronze-deep);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;display:block;}
+  .policy-head h2{font-family:'Noto Serif TC',serif;font-size:26px;margin:0 0 10px;}
+  .policy-head .span{font-size:13px;color:var(--ink-soft);}
+
+  .field-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  @media (max-width:760px){.field-grid{grid-template-columns:1fr;}}
+  .field-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px 22px;}
+  .field-card.full{grid-column:1 / -1;}
+  .field-lab{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--bronze-deep);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;}
+  .field-val{font-size:14px;line-height:1.85;color:var(--ink-soft);}
+  .field-val b{color:var(--ink);}
+  .caveat{color:var(--rust);}
+
+  footer{padding:36px 0 60px;font-size:12px;color:var(--ink-soft);line-height:1.9;}
+</style>
+</head>
+<body>
+
+<div class="topnav"><div class="wrap"><a href="index.html">← 回首頁</a> ／ 02 政策資料庫 Policy Explorer</div></div>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Policy Explorer · Phase 2 示範版</div>
+    <h1>三個政策領域的完整示範。</h1>
+    <p class="lede">依你原本的規劃欄位（背景／目標／執行方式／投入成本／KPI／執行成果／國際案例／後續影響）整理。先做捷運、社會住宅、都市更新三個領域打樣，之後逐步擴充到其他領域。</p>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="tabbar" id="tabbar"></div>
+  <div class="section" id="policyBody"></div>
+</div>
+
+<footer>
+  <div class="wrap">
+    資料整理自〈台北市長30年政策回顧研究〉與相關公開報導。標紅字的欄位代表目前公開資料不足以精確量化，屬於待補充項目，避免用未經證實的數字誤導讀者。完整資料來源見<a href="open-data.html">06 開放資料中心</a>。
+  </div>
+</footer>
+
+<script>
+const policies = [
+  {
+    id:"mrt", tag:"交通 · 大眾運輸", title:"捷運路網",
+    span:"規劃逾40年，橫跨全部六任市長，是台北唯一真正「跨任期共同完成」的重大建設",
+    fields:{
+      "政策背景":"捷運議題自1980年代研議，1988年北投機廠動工，1990年黃大洲上任後啟動「六線齊發」大規模同步開挖，此後歷經六任市長持續建設，2020年環狀線第一階段通車，目前仍有信義東延段、萬大中和樹林線、環狀線南北環段等路線在建。",
+      "目標":"建立高運量大眾運輸系統，緩解私人運輸壅塞，帶動沿線土地開發，降低城市對私人運輸工具的依賴。",
+      "執行方式":"以市府（透過台北捷運局／捷運公司）自建為主，非BOT模式；六線同步施工是刻意選擇的策略，用「短痛換長痛」降低整體施工衝擊期。",
+      "投入成本":"<span class='caveat'>累積30餘年的分年度預算編列，官方尚未公布單一總累積金額，精確數字待進一步查證。</span>",
+      "KPI":"路網總長度、日運量、公共運輸出行占比。",
+      "執行成果":"主要路網已基本成形；2022年調查顯示台北市公共交通出行占比達<b>34.9%</b>，是全國最高。捷運通車後沿線房價與商業活動明顯提升。",
+      "國際案例":"可對照首爾、新加坡、香港等城市的大眾運輸導向發展（TOD）模式——這些城市普遍也是花費數十年才完成核心路網，捷運建設本質上是長週期基礎工程。",
+      "後續影響":"捷運便利性也帶來意外的副作用：搭配TPASS通勤月票後，新北、桃園居民「以時間換空間」通勤進台北的成本大幅降低，間接加速了台北市的人口外流（脫北潮）——交通越方便，「住在台北」的必要性反而越低。"
+    }
+  },
+  {
+    id:"housing", tag:"居住 · 社會住宅", title:"社會住宅",
+    span:"從郝龍斌任內起步，柯文哲列為招牌政策，蔣萬安延續既有案件推進",
+    fields:{
+      "政策背景":"郝龍斌任內開始推動「公營住宅」概念；柯文哲2014年選前提出「8年5萬戶」承諾，任內列為市政招牌政策；蔣萬安任內延續既有規劃案件的完工推進。",
+      "目標":"增加可負擔的租賃住宅供給，緩解高房價下的居住壓力，並以混居模式（一般戶／青年／低收入戶比例配置）避免社宅標籤化。",
+      "執行方式":"市府自建（自行實施型公辦都更／新建案）為主，搭配包租代管、分級租金補貼等多元政策工具。",
+      "投入成本":"<span class='caveat'>各案預算規模不一，且分年度編列，總投入金額待進一步彙整查證。</span>",
+      "KPI":"完工戶數、佔全市住宅存量比例、申請通過率、混居比例。",
+      "執行成果":"台北市社宅興辦量為六都之首，但實際完工進度不及當年「8年5萬戶」承諾——柯文哲任內確切新完工約5,000餘戶（若併計前朝動工部分約1.1–1.2萬戶，統計口徑各方有爭議，事實查核中心已多次查核）。2016–2022年台北市房價指數漲幅為六都最小。",
+      "國際案例":"新加坡HDB組屋、維也納市政住宅的社宅佔全市住宅存量比例遠高於台北（可達20–60%），台北目前社宅占比仍屬個位數百分比，顯示供給規模差距仍大。",
+      "後續影響":"社宅供給雖持續增加，但尚未能扭轉人口外流趨勢——2016–2025年台北市累計淨遷出27.1萬人，顯示單靠社宅供給的速度，還不足以抵銷高房價對居住決策的整體影響力。"
+    }
+  },
+  {
+    id:"renewal", tag:"都市發展 · 都市更新", title:"都市更新",
+    span:"2000年《都市更新條例》立法後逐步制度化，蔣萬安任內案件量達六任最高",
+    fields:{
+      "政策背景":"《都市更新條例》2000年立法後，台北市都更逐步制度化。歷經馬英九（圓環改造失敗）、郝龍斌（公營住宅起步）、柯文哲（西區門戶計畫、斯文里三期公辦都更）、蔣萬安（都更八箭）四個階段。",
+      "目標":"加速老舊建物重建，提升防災抗震能力，活化都市空間並增加住宅供給。",
+      "執行方式":"公辦都更（自行實施／委託實施）、危老重建、都市更新地區劃定等多種工具並行。",
+      "投入成本":"<span class='caveat'>依個案規模差異極大（例如斯文里三期延宕20多年才由政府接手辦理），無法給出單一總額，需依個案查證。</span>",
+      "KPI":"都更／危老案件核准數、更新地區完工率、報核案件成長率。",
+      "執行成果":"蔣萬安任內推動「都更八箭」，報核案件數為過去8年的2.3倍，也高於其他五都加總的1.4倍——是六任市長中都更政策力度最強的一位。但多數案件仍在審議或施工階段，完工成果仍需時間驗證。",
+      "國際案例":"日本「都市再生」制度中，政府主導型大型都更案例（如六本木一帶的再開發）常需要10–20年才能完成，顯示都市更新本質上是長回收期政策，難以在單一任期內看到最終成果。",
+      "後續影響":"都更速度提升有望緩解「高房價與危老建物並存」的困境，但短期內對緩解人口外流的效果有限——都更完工後的住宅單位通常價格反而更高，未必直接轉化為「可負擔」住宅供給。"
+    }
+  }
+];
+
+const tabbar = document.getElementById('tabbar');
+policies.forEach((p,i)=>{
+  const btn = document.createElement('div');
+  btn.className = 'tab' + (i===0?' active':'');
+  btn.textContent = p.title;
+  btn.onclick = ()=>selectPolicy(i);
+  tabbar.appendChild(btn);
+});
+
+function selectPolicy(i){
+  document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active', idx===i));
+  const p = policies[i];
+  const fullFields = ["國際案例","後續影響"];
+  document.getElementById('policyBody').innerHTML = `
+    <div class="policy-head">
+      <span class="tag">${p.tag}</span>
+      <h2>${p.title}</h2>
+      <span class="span">${p.span}</span>
+    </div>
+    <div class="field-grid">
+      ${Object.entries(p.fields).map(([k,v])=>`
+        <div class="field-card ${fullFields.includes(k)?'full':''}">
+          <div class="field-lab">${k}</div>
+          <div class="field-val">${v}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+selectPolicy(0);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>城市治理能力模型 — Taipei Governance Lab</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap');
+  :root{
+    --paper:#F1ECDF; --ink:#231F1A; --ink-soft:#5A5348;
+    --bronze:#A8763B; --bronze-deep:#7C5527; --rust:#B24A32;
+    --line:#C9BFA4; --card:#FAF7EE;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Noto Sans TC',sans-serif;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+  a{color:var(--bronze-deep);}
+
+  .topnav{padding:18px 0;border-bottom:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:12px;}
+  .topnav a{text-decoration:none;color:var(--ink-soft);}
+  .topnav a:hover{color:var(--bronze-deep);}
+
+  .hero{padding:56px 0 40px;border-bottom:1px solid var(--line);
+    background:repeating-linear-gradient(0deg, transparent 0 39px, rgba(35,31,26,0.035) 39px 40px), var(--paper);}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:var(--bronze-deep);text-transform:uppercase;margin-bottom:16px;}
+  h1{font-family:'Noto Serif TC',serif;font-weight:900;font-size:clamp(28px,4.6vw,44px);line-height:1.25;margin:0 0 18px;max-width:680px;}
+  .lede{font-size:16px;line-height:1.9;color:var(--ink-soft);max-width:640px;margin:0;}
+
+  .section{padding:56px 0;border-bottom:1px solid var(--line);}
+  .section.no-border{border-bottom:none;}
+  .section-head{display:flex;align-items:baseline;gap:14px;margin-bottom:10px;}
+  .section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--bronze-deep);border-bottom:2px solid var(--bronze);padding-bottom:2px;}
+  .section h2{font-family:'Noto Serif TC',serif;font-weight:700;font-size:24px;margin:0;}
+  .section-note{font-size:14px;color:var(--ink-soft);max-width:700px;line-height:1.8;margin:14px 0 30px;}
+
+  /* capability cards */
+  .cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:820px){.cap-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:560px){.cap-grid{grid-template-columns:1fr;}}
+  .cap-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 18px;position:relative;}
+  .cap-rank{position:absolute;top:14px;right:14px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--bronze-deep);background:rgba(168,118,59,0.12);padding:2px 8px;border-radius:999px;}
+  .cap-name{font-family:'Noto Serif TC',serif;font-weight:700;font-size:16px;margin:0 0 8px;padding-right:40px;}
+  .cap-def{font-size:13px;color:var(--ink-soft);line-height:1.7;}
+
+  /* priority chart */
+  .priority-row{display:grid;grid-template-columns:150px 1fr 60px;align-items:center;gap:14px;margin-bottom:14px;}
+  @media (max-width:600px){.priority-row{grid-template-columns:110px 1fr 44px;}}
+  .priority-label{font-size:13.5px;font-weight:700;text-align:right;}
+  .priority-track{background:var(--paper-deep,#E8E0CC);border-radius:6px;height:20px;overflow:hidden;border:1px solid var(--line);}
+  .priority-fill{height:100%;background:linear-gradient(90deg, var(--bronze), var(--rust));border-radius:6px 0 0 6px;}
+  .priority-pct{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .priority-why{font-size:12.5px;color:var(--ink-soft);grid-column:2 / span 1;margin-top:-8px;margin-bottom:6px;line-height:1.6;}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;line-height:1.7;}
+  th{background:var(--card);font-family:'Noto Serif TC',serif;font-weight:700;}
+  td.mayor{font-family:'Noto Serif TC',serif;font-weight:700;white-space:nowrap;}
+
+  .callout{background:rgba(178,74,50,0.07);border:1px solid rgba(178,74,50,0.3);border-radius:10px;padding:20px 22px;font-size:13.5px;line-height:1.8;color:var(--ink-soft);}
+  .callout b{color:var(--rust);}
+
+  footer{padding:36px 0 60px;font-size:12px;color:var(--ink-soft);line-height:1.9;}
+</style>
+</head>
+<body>
+
+<div class="topnav"><div class="wrap"><a href="index.html">← 回首頁</a> ／ 03 城市治理能力模型</div></div>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Governance Framework · 說明頁</div>
+    <h1>我們不直接替市長打分數，<br>而是拆解「治理能力」本身。</h1>
+    <p class="lede">政策成果回答「做了什麼、結果如何」；治理能力回答「有沒有能力把事情做成」。這頁公開12項能力的定義、六任市長的證據對照，以及——這次更新的重點——<b style="color:var(--ink);">台北當代最需要強化的能力排序</b>。</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="section">
+    <div class="section-head"><span class="section-num">01</span><h2>十二項治理能力</h2></div>
+    <p class="section-note">每項能力附一句話定義，完整的判斷指標請見配套文件〈治理能力模型_方法論.md〉。</p>
+    <div class="cap-grid" id="capGrid"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><span class="section-num">02</span><h2>台北當代最需要強化的能力</h2></div>
+    <p class="section-note">這不是歷史打分，是<b style="color:var(--ink);">往前看</b>：依人口外流、財政結構、國際科技投資三個趨勢，推導出哪些能力的重要性正在快速上升。條越長，代表我們判斷的優先度越高——這是研究團隊的推論，不是民調結果，歡迎質疑。</p>
+    <div id="priorityChart"></div>
+  </div>
+
+  <div class="section no-border">
+    <div class="section-head"><span class="section-num">03</span><h2>六任市長：能力證據對照（簡表）</h2></div>
+    <p class="section-note">依既有研究文件整理，只列相對突出／相對薄弱的能力，並附具體事件依據，避免空泛評語。</p>
+    <table>
+      <tr><th style="width:90px;">市長</th><th>相對突出的能力</th><th>相對薄弱或證據不足的能力</th></tr>
+      <tr><td class="mayor">黃大洲</td><td>執行能力（捷運六線齊發、拆遷中華商場如期推進）；長期願景（基礎建設效益20–30年後才顯現）</td><td>溝通能力（選舉辯論中形象溝通明顯不足）</td></tr>
+      <tr><td class="mayor">陳水扁</td><td>溝通能力（親民形象、行銷手法備受肯定）；市民服務（公務員風氣改革）</td><td>財政紀律（任期短，樣本有限）</td></tr>
+      <tr><td class="mayor">馬英九</td><td>溝通能力（滿意度長期居高）；國際合作（後續總統任內活路外交延續）</td><td>財政紀律（8年負債增加逾千億）；執行能力（多項承諾跳票）</td></tr>
+      <tr><td class="mayor">郝龍斌</td><td>國際合作（聽奧/花博/世大運/雙城論壇密集期）；執行能力（YouBike等硬體落地穩定）</td><td>溝通能力（民調長期落後於國際評比與獎項）</td></tr>
+      <tr><td class="mayor">柯文哲</td><td>財政紀律（首任4年還債570億）；科技治理（開放資料平台、參與式預算）</td><td>廉政與透明（卸任後京華城案、政治獻金案）；溝通能力（第二任期黨政分際模糊）</td></tr>
+      <tr><td class="mayor">蔣萬安</td><td>產業發展（輝達進駐）；都市更新（都更八箭案件量六任最高）</td><td>危機處理（鼠患議題信心落差）；長期願景（任期未滿，證據尚不完整）</td></tr>
+    </table>
+  </div>
+
+  <div class="section no-border" style="padding-top:0;">
+    <div class="callout">
+      <b>方法論提醒：</b>本頁的能力定義為研究團隊原創架構，優先排序是依現有趨勢資料的推論，並非學術文獻、專家共識調查或民調結果。我們刻意選擇公開推論過程，而不是只給結論，因為這個網站的核心主張就是「用證據不用立場」——如果連自己的方法論都不敢公開檢視，這個主張就站不住腳。完整資料來源見配套文件。
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="wrap">資料來源：〈台北市長30年政策回顧研究〉、〈治理能力模型_方法論〉。歡迎透過網站回饋機制對本頁排序提出異議或補充證據。</div>
+</footer>
+
+<script>
+const capabilities = [
+  {name:"長期願景", def:"能否設定超越單一任期、跨黨派仍值得延續的城市發展方向", rank:12},
+  {name:"執行能力", def:"能否把政策從規劃推進到實際完工/上線，控制時程與品質", rank:9},
+  {name:"財政紀律", def:"能否在建設投入與財政永續之間取得平衡，不債留子孫", rank:8},
+  {name:"溝通能力", def:"能否讓市民理解政策取捨，爭議發生時能否有效說明", rank:11},
+  {name:"危機處理", def:"面對天災、疫情、公安事故、輿論風暴時能否穩定局面", rank:2},
+  {name:"都市更新", def:"能否推動高爭議、長回收期的都市空間改造", rank:1},
+  {name:"交通治理", def:"能否讓城市的移動系統持續進化，包括制度、定價、路權分配", rank:3},
+  {name:"產業發展", def:"能否創造/吸引真正在地扎根、能提供就業與稅收的產業活動", rank:10},
+  {name:"國際合作", def:"能否讓台北在國際城市網絡、國際資本、國際人才競逐中佔有一席之地", rank:6},
+  {name:"科技治理", def:"能否用數位工具提升市政效率，同時建立資安/資料治理配套", rank:4},
+  {name:"市民服務", def:"能否讓市民在日常生活各接觸點感受到政府「好用」", rank:5},
+  {name:"廉政與透明", def:"能否讓市政決策過程可受公眾檢視，弊案發生時能否徹查", rank:7}
+];
+
+document.getElementById('capGrid').innerHTML = capabilities
+  .slice().sort((a,b)=>a.rank-b.rank)
+  .map(c=>`<div class="cap-card"><div class="cap-rank">當代優先 #${c.rank}</div><div class="cap-name">${c.name}</div><div class="cap-def">${c.def}</div></div>`)
+  .join('');
+
+const priorities = [
+  {name:"都市更新", pct:96, why:"直接對應人口外流與高房價的根源"},
+  {name:"危機處理", pct:89, why:"氣候異常（強降雨、颱風）與公共衛生事件（如鼠患）頻率上升，且鼠患案例顯示「認為嚴重49.2% vs. 認為有能力解決39.4%」的信心落差，顯示能力尚未跟上風險上升速度"},
+  {name:"交通治理", pct:84, why:"交通不佳長期是市民抱怨之首之二（僅次於房價，30.2%認為應立即改善），且行人安全、路口設計等議題近年也是國際媒體點名的治理弱項，路網雖已成熟但使用體驗與安全治理仍待強化"},
+  {name:"科技治理", pct:76, why:"尖端產業落地帶來的治理複雜度遠超過去的「數位便民」層次"},
+  {name:"市民服務", pct:71, why:"留住青年家庭的關鍵，隨少子化重要性持續上升"},
+  {name:"國際合作", pct:60, why:"性質正從文化行銷轉向跨部門經濟治理協調"},
+  {name:"廉政與透明", pct:56, why:"容易被政績討論蓋過，卻是所有其他能力的信任基礎"},
+  {name:"財政紀律", pct:48, why:"近兩任市長已把負債壓到30年新低水位，短期舉債風險相對可控，急迫性低於前述結構性挑戰，但長期仍需持續監控稅基萎縮風險"},
+  {name:"執行能力", pct:44, why:"是所有政策的共通基礎能力，重要但非當代特有的新挑戰"},
+  {name:"產業發展", pct:36, why:"與科技治理高度重疊，作為獨立能力的邊際重要性略低"},
+  {name:"溝通能力", pct:29, why:"重要但屬於「執行其他能力」的輔助能力"},
+  {name:"長期願景", pct:24, why:"排序較低是因為難以在單一任期內被檢驗，但長期看可能最關鍵——這是刻意保留的矛盾"}
+];
+
+document.getElementById('priorityChart').innerHTML = priorities.map(p=>`
+  <div class="priority-row">
+    <div class="priority-label">${p.name}</div>
+    <div class="priority-track"><div class="priority-fill" style="width:${p.pct}%;"></div></div>
+    <div class="priority-pct">${p.pct}</div>
+  </div>
+  <div class="priority-why">— ${p.why}</div>
+`).join('');
+</script>
+
+</body>
+</html>
