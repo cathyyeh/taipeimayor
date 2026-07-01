@@ -61,6 +61,24 @@
   .callout b{color:var(--rust);}
 
   footer{padding:36px 0 60px;font-size:12px;color:var(--ink-soft);line-height:1.9;}
+
+  /* mayor selector timeline (reused pattern) */
+  .timeline{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card);flex-wrap:wrap;}
+  .era{flex:1;min-width:110px;padding:14px 10px;cursor:pointer;border-right:1px solid var(--line);text-align:center;transition:background .15s;}
+  .era:last-child{border-right:none;}
+  .era:hover{background:rgba(168,118,59,0.08);}
+  .era.active{background:var(--bronze);color:#fff;}
+  .era-name{font-family:'Noto Serif TC',serif;font-weight:700;font-size:14.5px;}
+  .era-term{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-soft);margin-top:3px;}
+  .era.active .era-term{color:rgba(255,255,255,0.85);}
+
+  /* capability bar chart */
+  .cap-bar-row{display:grid;grid-template-columns:130px 1fr 30px;align-items:center;gap:12px;margin-bottom:11px;}
+  @media (max-width:600px){.cap-bar-row{grid-template-columns:96px 1fr 26px;}}
+  .cap-bar-label{font-size:13px;font-weight:700;text-align:right;}
+  .cap-bar-track{background:var(--paper);border-radius:6px;height:16px;border:1px solid var(--line);overflow:hidden;}
+  .cap-bar-fill{height:100%;background:linear-gradient(90deg, var(--bronze), var(--bronze-deep));border-radius:6px 0 0 6px;}
+  .cap-bar-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
 </style>
 </head>
 <body>
@@ -71,7 +89,7 @@
   <div class="wrap">
     <div class="eyebrow">Governance Framework · 說明頁</div>
     <h1>我們不直接替市長打分數，<br>而是拆解「治理能力」本身。</h1>
-    <p class="lede">政策成果回答「做了什麼、結果如何」；治理能力回答「有沒有能力把事情做成」。這頁公開12項能力的定義、六任市長的證據對照，以及——這次更新的重點——<b style="color:var(--ink);">台北當代最需要強化的能力排序</b>。</p>
+    <p class="lede">政策成果回答「做了什麼、結果如何」；治理能力回答「有沒有能力把事情做成」。這頁公開12項能力的定義、<b style="color:var(--ink);">六任市長的完整1–5分評分</b>、台北當代最需要強化的能力排序，以及——這次更新的重點——<b style="color:var(--ink);">用GitHub Issues公開接受評分異議</b>。</p>
   </div>
 </div>
 
@@ -89,9 +107,18 @@
     <div id="priorityChart"></div>
   </div>
 
-  <div class="section no-border">
-    <div class="section-head"><span class="section-num">03</span><h2>六任市長：能力證據對照（簡表）</h2></div>
-    <p class="section-note">依既有研究文件整理，只列相對突出／相對薄弱的能力，並附具體事件依據，避免空泛評語。</p>
+  <div class="section">
+    <div class="section-head"><span class="section-num">03</span><h2>正式評分：六任市長 × 12項能力</h2></div>
+    <p class="section-note">這是 Phase 3 的重點更新——把原本只列「相對突出/相對薄弱」的簡表，變成完整的1–5分評分。點選下方任一市長，查看他在12項能力上的完整剖面。評分依據見配套文件〈治理能力模型_方法論.md〉的72格對照表；任期較短或未滿的市長（黃大洲、陳水扁、蔣萬安），部分能力樣本不足，已在方法論文件中註明。</p>
+    <div class="timeline" id="capTimeline"></div>
+    <div class="panel" style="margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px 24px;">
+      <div id="capBarChart"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><span class="section-num">04</span><h2>六任市長：能力對照速覽</h2></div>
+    <p class="section-note">上方是完整的12維度評分，這裡保留一份快速對照表，只列每任市長最突出與最薄弱的能力，方便快速掃視。</p>
     <table>
       <tr><th style="width:90px;">市長</th><th>相對突出的能力</th><th>相對薄弱或證據不足的能力</th></tr>
       <tr><td class="mayor">黃大洲</td><td>執行能力（捷運六線齊發、拆遷中華商場如期推進）；長期願景（基礎建設效益20–30年後才顯現）</td><td>溝通能力（選舉辯論中形象溝通明顯不足）</td></tr>
@@ -103,6 +130,14 @@
     </table>
   </div>
 
+  <div class="section">
+    <div class="section-head"><span class="section-num">05</span><h2>對評分有異議？</h2></div>
+    <p class="section-note">這頁的評分是研究團隊的推論，不是唯一正確答案。如果你認為某個分數不合理、有更好的證據，我們用 GitHub Issues 當公開的異議紀錄——任何人都可以看到誰提出了什麼質疑、我們怎麼回應，而不是私下修改分數就算了。</p>
+    <div class="callout" style="border-color:var(--bronze);background:rgba(168,118,59,0.08);">
+      <b style="color:var(--bronze-deep);">怎麼提出異議：</b>到 <a href="https://github.com/cathyyeh/taipeimayor/issues/new" target="_blank">本專案的 GitHub Issues 頁面</a> 開一個新 issue，標題請包含市長姓名與能力項目（例如「柯文哲—國際合作評分」），內容附上你認為更準確的證據來源。我們會公開回覆，同意調整的話會附上修改紀錄。
+    </div>
+  </div>
+
   <div class="section no-border" style="padding-top:0;">
     <div class="callout">
       <b>方法論提醒：</b>本頁的能力定義為研究團隊原創架構，優先排序是依現有趨勢資料的推論，並非學術文獻、專家共識調查或民調結果。我們刻意選擇公開推論過程，而不是只給結論，因為這個網站的核心主張就是「用證據不用立場」——如果連自己的方法論都不敢公開檢視，這個主張就站不住腳。完整資料來源見配套文件。
@@ -112,7 +147,7 @@
 </div>
 
 <footer>
-  <div class="wrap">資料來源：〈台北市長30年政策回顧研究〉、〈治理能力模型_方法論〉。歡迎透過網站回饋機制對本頁排序提出異議或補充證據。</div>
+  <div class="wrap">資料來源：〈台北市長30年政策回顧研究〉、〈治理能力模型_方法論〉。歡迎透過 GitHub Issues 對本頁評分或排序提出異議或補充證據。</div>
 </footer>
 
 <script>
@@ -159,6 +194,43 @@ document.getElementById('priorityChart').innerHTML = priorities.map(p=>`
   </div>
   <div class="priority-why">— ${p.why}</div>
 `).join('');
+
+/* ---------- 六任市長 x 12項能力 正式評分 ---------- */
+const capNames = ["長期願景","執行能力","財政紀律","溝通能力","危機處理","都市更新","交通治理","產業發展","國際合作","科技治理","市民服務","廉政與透明"];
+
+const mayorScores = [
+  {name:"黃大洲", term:"1990–1994", scores:[5,5,3,2,2,3,5,2,2,1,2,3]},
+  {name:"陳水扁", term:"1994–1998", scores:[2,3,3,5,2,2,3,3,2,2,4,3]},
+  {name:"馬英九", term:"1998–2006", scores:[3,2,1,5,3,1,4,3,4,3,3,2]},
+  {name:"郝龍斌", term:"2006–2014", scores:[3,4,4,2,3,3,4,3,5,2,4,3]},
+  {name:"柯文哲", term:"2014–2022", scores:[3,3,4,2,3,4,2,4,4,5,4,1]},
+  {name:"蔣萬安", term:"2022–現任", scores:[2,4,4,3,2,5,4,5,3,3,4,3]}
+];
+
+const capTimelineEl = document.getElementById('capTimeline');
+mayorScores.forEach((m,i)=>{
+  const el = document.createElement('div');
+  el.className = 'era' + (i===0?' active':'');
+  el.innerHTML = `<div class="era-name">${m.name}</div><div class="era-term">${m.term}</div>`;
+  el.onclick = ()=>selectCapMayor(i);
+  capTimelineEl.appendChild(el);
+});
+
+function selectCapMayor(i){
+  document.querySelectorAll('#capTimeline .era').forEach((e,idx)=>e.classList.toggle('active', idx===i));
+  const m = mayorScores[i];
+  document.getElementById('capBarChart').innerHTML = `
+    <div style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:16px;margin-bottom:16px;">${m.name}　<span style="font-size:12px;color:var(--ink-soft);font-weight:400;">${m.term}</span></div>
+    ${capNames.map((c,idx)=>`
+      <div class="cap-bar-row">
+        <div class="cap-bar-label">${c}</div>
+        <div class="cap-bar-track"><div class="cap-bar-fill" style="width:${m.scores[idx]/5*100}%;"></div></div>
+        <div class="cap-bar-val">${m.scores[idx]}/5</div>
+      </div>
+    `).join('')}
+  `;
+}
+selectCapMayor(0);
 </script>
 
 </body>

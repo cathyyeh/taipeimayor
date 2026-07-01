@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>城市政策模擬器 — Taipei Governance Lab</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap');
+  :root{
+    --paper:#F1ECDF; --paper-deep:#E8E0CC; --ink:#231F1A; --ink-soft:#5A5348;
+    --bronze:#A8763B; --bronze-deep:#7C5527; --rust:#B24A32;
+    --line:#C9BFA4; --card:#FAF7EE;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Noto Sans TC',sans-serif;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+  a{color:var(--bronze-deep);}
+
+  .topnav{padding:16px 0;border-bottom:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:12px;}
+  .topnav a{text-decoration:none;color:var(--ink-soft);}
+  .topnav a:hover{color:var(--bronze-deep);}
+
+  .hero{padding:52px 0 32px;border-bottom:1px solid var(--line);
+    background:repeating-linear-gradient(0deg, transparent 0 39px, rgba(35,31,26,0.035) 39px 40px), var(--paper);}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:var(--bronze-deep);text-transform:uppercase;margin-bottom:16px;}
+  h1{font-family:'Noto Serif TC',serif;font-weight:900;font-size:clamp(26px,4.4vw,40px);line-height:1.3;margin:0 0 16px;max-width:660px;}
+  .lede{font-size:15.5px;line-height:1.9;color:var(--ink-soft);max-width:640px;margin:0;}
+
+  .disclaimer{
+    background:rgba(178,74,50,0.09);border:2px solid var(--rust);border-radius:10px;
+    padding:18px 22px;margin-top:22px;font-size:13.5px;line-height:1.85;color:var(--ink);
+  }
+  .disclaimer b{color:var(--rust);}
+
+  .section{padding:44px 0;border-bottom:1px solid var(--line);}
+  .section.no-border{border-bottom:none;}
+  .section-head{display:flex;align-items:baseline;gap:14px;margin-bottom:10px;}
+  .section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--bronze-deep);border-bottom:2px solid var(--bronze);padding-bottom:2px;}
+  .section h2{font-family:'Noto Serif TC',serif;font-weight:700;font-size:22px;margin:0;}
+  .section-note{font-size:14px;color:var(--ink-soft);max-width:700px;line-height:1.8;margin:14px 0 26px;}
+
+  /* sliders */
+  .budget-panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:24px 26px;}
+  .budget-total{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px;padding-bottom:16px;border-bottom:1px dashed var(--line);}
+  .budget-total .label{font-family:'Noto Serif TC',serif;font-weight:700;font-size:15px;}
+  .budget-total .val{font-family:'JetBrains Mono',monospace;font-size:20px;color:var(--bronze-deep);}
+  .budget-total .val.over{color:var(--rust);}
+  .slider-row{margin-bottom:20px;}
+  .slider-head{display:flex;justify-content:space-between;margin-bottom:8px;}
+  .slider-name{font-size:14px;font-weight:700;}
+  .slider-val{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--bronze-deep);}
+  .slider-desc{font-size:12px;color:var(--ink-soft);margin-bottom:8px;line-height:1.6;}
+  input[type=range]{width:100%;accent-color:var(--bronze);cursor:pointer;}
+
+  .run-btn{
+    font-family:'Noto Serif TC',serif;font-weight:700;font-size:15px;
+    background:var(--bronze);color:#fff;border:none;border-radius:999px;
+    padding:14px 32px;cursor:pointer;display:block;margin:28px auto 0;
+    transition:background .15s;
+  }
+  .run-btn:hover{background:var(--bronze-deep);}
+
+  /* results */
+  #results{display:none;}
+  .metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  @media (max-width:700px){.metric-grid{grid-template-columns:1fr;}}
+  .metric-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;}
+  .metric-name{font-family:'Noto Serif TC',serif;font-weight:700;font-size:14.5px;margin-bottom:8px;}
+  .metric-chart{width:100%;height:auto;}
+  .metric-summary{font-size:12.5px;color:var(--ink-soft);margin-top:6px;line-height:1.7;}
+  .metric-summary b{color:var(--ink);}
+
+  .assumption-list{list-style:none;margin:0;padding:0;font-size:13px;line-height:1.8;color:var(--ink-soft);}
+  .assumption-list li{padding:8px 0;border-bottom:1px solid var(--line);}
+  .assumption-list li:last-child{border-bottom:none;}
+
+  footer{padding:36px 0 60px;font-size:12px;color:var(--ink-soft);line-height:1.9;}
+</style>
+</head>
+<body>
+
+<div class="topnav"><div class="wrap"><a href="index.html">← 回首頁</a> ／ 04 城市政策模擬器</div></div>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Urban Policy Simulator · 規則式模擬 v0.1</div>
+    <h1>如果你是市長，8年的預算你會怎麼分配？</h1>
+    <p class="lede">把100個預算點分配到六個政策領域，模擬未來8年台北市在人口、房價、財政、市民滿意度上可能出現的走向——重點不是「猜對未來」，是感受政策之間真實存在的取捨。</p>
+    <div class="disclaimer">
+      <b>這不是AI預測工具，是簡化的教學模擬器。</b>裡面的係數是研究團隊依現有趨勢資料設定的<b>簡化假設</b>，不是計量模型或機器學習訓練出來的預測——真實城市治理牽涉的變因遠比這裡呈現的複雜。請把模擬結果當成「理解取捨關係」的教材，不要當成任何形式的政策建議或未來預測。完整假設列在本頁最下方，歡迎質疑。
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="section">
+    <div class="section-head"><span class="section-num">01</span><h2>分配你的預算</h2></div>
+    <p class="section-note">總共100點，六個領域，滑桿數字是相對比重，不是實際金額。城市起始狀態依台北市目前的真實數據設定（詳見假設清單）。</p>
+    <div class="budget-panel">
+      <div class="budget-total">
+        <div class="label">已分配</div>
+        <div class="val" id="budgetTotal">0 / 100</div>
+      </div>
+      <div id="sliders"></div>
+    </div>
+    <button class="run-btn" onclick="runSimulation()">模擬未來8年</button>
+  </div>
+
+  <div class="section no-border" id="results">
+    <div class="section-head"><span class="section-num">02</span><h2>8年後的台北，可能長什麼樣子</h2></div>
+    <p class="section-note">每張圖的起點都是台北市目前的真實基準值。虛線是「維持現狀不變」的對照線，方便你判斷你的分配比不分配好還是壞。</p>
+    <div class="metric-grid" id="metricGrid"></div>
+  </div>
+
+</div>
+
+<div class="wrap section no-border" style="padding-top:0;">
+  <div class="section-head"><span class="section-num">03</span><h2>完整假設清單（公開檢視）</h2></div>
+  <p class="section-note">跟網站其他模組一樣的原則：假設公開，歡迎挑戰。如果你認為某個係數不合理，到 <a href="https://github.com/cathyyeh/taipeimayor/issues/new" target="_blank">GitHub Issues</a> 提出，附上你認為更準確的依據。</p>
+  <ul class="assumption-list" id="assumptionList"></ul>
+</div>
+
+<footer>
+  <div class="wrap">起始數值來源：〈台北市長30年政策回顧研究〉（財政負債、人口淨遷徙）、台北市政府研考會施政滿意度調查。模擬係數為研究團隊簡化假設，非官方模型，詳見上方假設清單。</div>
+</footer>
+
+<script>
+const baseline = {
+  population: 0,      // 累積淨遷徙（萬人），0 = 目前水位，正值代表淨遷入、負值代表淨遷出
+  housing: 100,        // 房價指數，100 = 目前水位
+  debt: 824,           // 財政負債（億元），目前水位
+  satisfaction: 60     // 市民滿意度（%），簡化單一指標
+};
+
+const categories = [
+  {id:"housing", name:"都市更新／住宅", desc:"加速危老重建、擴大社會住宅供給"},
+  {id:"transit", name:"交通治理", desc:"路網建設、路權與定價制度調整"},
+  {id:"tech", name:"科技產業招商", desc:"招商配套、能源與資安基礎設施"},
+  {id:"crisis", name:"危機處理／防災", desc:"公共衛生與災害應變制度"},
+  {id:"social", name:"市民服務／社福", desc:"托育、長照、租屋補貼等日常服務"},
+  {id:"debt", name:"財政還債", desc:"優先償還既有負債，不新增建設支出"}
+];
+
+// 每點投入的年度效果假設（簡化線性模型，附遞減修正）
+const coefficients = {
+  housing:{population:+0.03, housing:-0.30, debt:+2.0, satisfaction:+0.05},
+  transit:{population:-0.005, housing:0, debt:+1.2, satisfaction:+0.04, commute:-0.4},
+  tech:{population:+0.01, housing:+0.05, debt:-0.6, satisfaction:+0.02},
+  crisis:{population:+0.005, housing:0, debt:+0.8, satisfaction:+0.06},
+  social:{population:+0.015, housing:0, debt:+1.0, satisfaction:+0.08},
+  debt:{population:0, housing:0, debt:-5.0, satisfaction:-0.01}
+};
+
+const slidersEl = document.getElementById('sliders');
+const values = {};
+categories.forEach(c=>{ values[c.id] = 0; });
+
+categories.forEach(c=>{
+  const row = document.createElement('div');
+  row.className = 'slider-row';
+  row.innerHTML = `
+    <div class="slider-head"><span class="slider-name">${c.name}</span><span class="slider-val" id="val-${c.id}">0</span></div>
+    <div class="slider-desc">${c.desc}</div>
+    <input type="range" min="0" max="100" value="0" id="slider-${c.id}" oninput="updateSlider('${c.id}', this.value)">
+  `;
+  slidersEl.appendChild(row);
+});
+
+function updateSlider(id, val){
+  values[id] = parseInt(val);
+  document.getElementById(`val-${id}`).textContent = val;
+  const total = Object.values(values).reduce((a,b)=>a+b,0);
+  const totalEl = document.getElementById('budgetTotal');
+  totalEl.textContent = `${total} / 100`;
+  totalEl.classList.toggle('over', total > 100);
+}
+
+function runSimulation(){
+  const total = Object.values(values).reduce((a,b)=>a+b,0);
+  if(total === 0){ alert('請先分配至少一些預算點，才能看到模擬結果。'); return; }
+
+  const years = 8;
+  const series = { population:[baseline.population], housing:[baseline.housing], debt:[baseline.debt], satisfaction:[baseline.satisfaction] };
+  const flatSeries = { population:[baseline.population], housing:[baseline.housing], debt:[baseline.debt], satisfaction:[baseline.satisfaction] };
+
+  // 目前趨勢下「維持現狀不變」的參照線（依既有研究：持續淨遷出、房價緩升、滿意度緩降）
+  const driftPerYear = { population:-4.4, housing:+1.5, debt:-8, satisfaction:-0.5 };
+
+  for(let y=1;y<=years;y++){
+    let dPop=0, dHouse=0, dDebt=0, dSat=0;
+    categories.forEach(c=>{
+      const pts = values[c.id];
+      const damp = Math.sqrt(pts/100); // 邊際效益遞減
+      const coef = coefficients[c.id];
+      dPop += coef.population * pts * (0.6+0.4*damp);
+      dHouse += coef.housing * pts * (0.6+0.4*damp);
+      dDebt += coef.debt * pts * (0.6+0.4*damp);
+      dSat += coef.satisfaction * pts * (0.6+0.4*damp);
+    });
+    series.population.push(series.population[y-1] + dPop);
+    series.housing.push(Math.max(40, series.housing[y-1] + dHouse));
+    series.debt.push(Math.max(0, series.debt[y-1] + dDebt));
+    series.satisfaction.push(Math.min(95, Math.max(15, series.satisfaction[y-1] + dSat)));
+
+    flatSeries.population.push(flatSeries.population[y-1] + driftPerYear.population);
+    flatSeries.housing.push(flatSeries.housing[y-1] + driftPerYear.housing);
+    flatSeries.debt.push(Math.max(0, flatSeries.debt[y-1] + driftPerYear.debt));
+    flatSeries.satisfaction.push(Math.min(95,Math.max(15,flatSeries.satisfaction[y-1] + driftPerYear.satisfaction)));
+  }
+
+  const metrics = [
+    {key:"population", name:"累積人口淨遷徙（萬人）", unit:"萬人", summary: v=>`8年後累積${v>=0?'淨遷入':'淨遷出'}約${Math.abs(v).toFixed(1)}萬人`},
+    {key:"housing", name:"房價指數（100=目前）", unit:"", summary: v=>`房價指數變化到${v.toFixed(0)}`},
+    {key:"debt", name:"財政負債（億元）", unit:"億元", summary: v=>`負債水位約${v.toFixed(0)}億元`},
+    {key:"satisfaction", name:"市民滿意度（%）", unit:"%", summary: v=>`滿意度約${v.toFixed(0)}%`}
+  ];
+
+  document.getElementById('metricGrid').innerHTML = metrics.map(m=>`
+    <div class="metric-card">
+      <div class="metric-name">${m.name}</div>
+      <svg class="metric-chart" viewBox="0 0 400 180" id="chart-${m.key}"></svg>
+      <div class="metric-summary">你的分配：<b>${m.summary(series[m.key][years])}</b>　／　維持現狀：${m.summary(flatSeries[m.key][years])}</div>
+    </div>
+  `).join('');
+
+  metrics.forEach(m=> drawLineChart(`chart-${m.key}`, series[m.key], flatSeries[m.key]));
+
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('results').scrollIntoView({behavior:'smooth'});
+}
+
+function drawLineChart(svgId, dataA, dataB){
+  const svg = document.getElementById(svgId);
+  const W=400,H=180,padL=40,padR=10,padT=14,padB=24;
+  const all = dataA.concat(dataB);
+  const minV = Math.min(...all), maxV = Math.max(...all);
+  const range = (maxV-minV)||1;
+  const n = dataA.length;
+  const xScale = i => padL + i/(n-1)*(W-padL-padR);
+  const yScale = v => H-padB - (v-minV)/range*(H-padT-padB);
+
+  const pathA = dataA.map((v,i)=>`${i===0?'M':'L'} ${xScale(i)} ${yScale(v)}`).join(' ');
+  const pathB = dataB.map((v,i)=>`${i===0?'M':'L'} ${xScale(i)} ${yScale(v)}`).join(' ');
+
+  let grid = '';
+  for(let i=0;i<n;i++){
+    grid += `<text x="${xScale(i)}" y="${H-6}" font-size="9" fill="#5A5348" text-anchor="middle" font-family="JetBrains Mono, monospace">${i}</text>`;
+  }
+
+  svg.innerHTML = `
+    ${grid}
+    <path d="${pathB}" fill="none" stroke="#5A5348" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.6"/>
+    <path d="${pathA}" fill="none" stroke="#A8763B" stroke-width="2.4"/>
+    <circle cx="${xScale(n-1)}" cy="${yScale(dataA[n-1])}" r="4" fill="#7C5527"/>
+  `;
+}
+
+const assumptions = [
+  "起始基準：財政負債824億元（蔣萬安上任後2023年數據）、市民滿意度60%（簡化為單一指標，實際上不同施政面向滿意度不同）、人口淨遷徙以0為基準點（代表模擬起點，實際台北市2025年單年淨遷出達4.4萬人）。",
+  "「維持現狀不變」對照線：依現有趨勢外推——人口每年淨遷出4.4萬人、房價指數每年上升1.5點、負債每年自然下降8億元（依近年減債速度）、滿意度每年下降0.5個百分點。這條線本身也是簡化假設，不是官方預測。",
+  "都市更新／住宅投入：每點對房價的抑制效果最大，但會增加財政支出（新建/補貼成本），且效益有邊際遞減（用平方根函數模擬「做得越多，每多一點的邊際效益越小」）。",
+  "交通治理投入：主要效果是縮短通勤時間，但因為捷運/TPASS等基礎設施改善也會讓外縣市通勤更容易，對「留住人口」的效果被模型設定為微幅負向——這是本模型比較反直覺、也最值得挑戰的假設之一。",
+  "科技產業招商投入：長期有助於稅收（降低負債累積速度），但模型假設短期對滿意度的直接效果有限，因為招商成果通常需要時間才能轉化為市民有感的生活品質改善。",
+  "危機處理／防災與市民服務投入：對滿意度的直接效果係數最高，因為這類支出通常直接觸及市民日常生活，但兩者都會持續增加財政支出，且不像硬體建設能一次性完工。",
+  "財政還債：直接降低負債，但模型假設如果完全不投入其他領域，市民會感受到「政府沒有具體作為」，對滿意度有微幅負向影響。",
+  "所有效果都是同時、獨立線性加總計算，沒有模擬領域之間的交互作用（例如都更跟交通同時投入可能有加成效果）——這是簡化模型的已知限制，未來版本如果導入更嚴謹的城市經濟模型，會在此頁註明版本更新。"
+];
+document.getElementById('assumptionList').innerHTML = assumptions.map(a=>`<li>${a}</li>`).join('');
+</script>
+
+</body>
+</html>
