@@ -4,6 +4,10 @@
     "exclude": ["*.html", "*.md", "/images/*.{png,jpg,gif}"]
   },
   "mimeTypes": {
-    ".md": "text/markdown"
+    ".md": "text/markdown; charset=utf-8",
+    ".html": "text/html; charset=utf-8"
+  },
+  "globalHeaders": {
+    "Content-Language": "zh-Hant"
   }
 }
